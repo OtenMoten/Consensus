@@ -5,10 +5,13 @@
  */
 package allocator;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -67,14 +70,29 @@ public class FileReader {
     public String getPathUserDataTable() {
         return this.pathUserDataTable;
     }
+    /**
+     * <b>Getter</b> <br>
+     * @since Release (1st July 2018)
+     * @return Path to the XML file where the metadata is within
+    */
+    public String getPathMetaDataTable() {
+        return this.pathMetaDataTable;
+    }
+    /**
+     * <b>Getter</b> <br>
+     * @since Release (1st July 2018)
+     * @return Path to the CSV file where the layout is within
+    */
+    public String getPathLayout() {
+        return this.pathLayout;
+    }
     
     /**
      * HSSF for .xls files >= Excel 97 & <= Excel 2005
-     * @param pathToUserDataTable represented by a String
      * @return The userdata Table from the Excel file as a two-dimensional String ArrayList
     */
-    public ArrayList<ArrayList<String>> readInUserDataTable (String pathToUserDataTable/*, char floatingPointChar*/) {
-        File excelFile = new File(pathToUserDataTable);
+    public ArrayList<ArrayList<String>> readInUserDataTable (/*, char floatingPointChar*/) {
+        File excelFile = new File(this.pathUserDataTable);
         //char floatingPoint = floatingPointChar; //Can be either a "." or a "," //Error handling in GUI
         HSSFWorkbook workbook;
         HSSFSheet spreadsheet;
@@ -86,7 +104,6 @@ public class FileReader {
         int numberOfRows;
         int numberOfColumns;
         int rowNumber = 0;
-        int cellNumber = 0;
         Alert alert = new Alert(Alert.AlertType.WARNING);
         
         try (FileInputStream excelFileInputStream = new FileInputStream(excelFile)) {
@@ -174,5 +191,26 @@ public class FileReader {
         }
         return userDataTable;
     }
-    
-}
+    /**
+     * The seeperator between each heading in the CSV file is configurable
+     * @param csvSplitBy represented by a String
+     * @return The headings of the layout as a one-dimensional String ArrayList
+    */
+    public ArrayList<String> readInLayout (String csvSplitBy) {
+        BufferedReader bufferedReader;
+        String textLine;
+        String splitter = csvSplitBy;
+        ArrayList<String> headings = new ArrayList<>();
+        
+        try {
+            bufferedReader = new BufferedReader(new java.io.FileReader(this.pathLayout));
+            textLine = bufferedReader.readLine();
+            headings = new ArrayList<>(Arrays.asList(textLine.split(splitter)));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FileReader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            Logger.getLogger(FileReader.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return headings;
+    }
+}   

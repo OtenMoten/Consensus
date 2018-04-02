@@ -14,8 +14,17 @@ import java.util.ConcurrentModificationException;
  */
 public class Layout {
     
+    /**
+     * Each heading of the layout will be separately stored in a one-dimensional ArrayList.
+     * Every heading in the ArrayList is a String object.
+     * The native order will not be changed.
+     * @since Release (1st July 2018)
+    */
     public final ArrayList<String> headings;
-    
+    /**
+     * The count of columns at the layout, represented by a Integer.
+     * @since Release (1st July 2018)
+    */
     public final int columnCount;
     
     /**
@@ -35,6 +44,40 @@ public class Layout {
         this.headings  = layout;
         this.columnCount = layout.size();
     }
+
+    /**
+     * <b>Getter</b> <br>
+     * The native order was not changed. It's a final value.
+     * @since Release (1st July 2018)
+     *  @return The headings from the layout
+    */
+    public ArrayList<String> getHeadings() {
+        return this.headings;
+    }
+    /**
+     * <b>Getter</b> <br>
+     * @since Release (1st July 2018)
+     * @return The number of columns at the layout
+    */
+    public int getColumnCount() {
+        return this.columnCount;
+    }
+    /**
+     * <b>Getter</b> <br>
+     * @param column representing a Integer
+     * @since Release (1st July 2018)
+     * @return A heading by a specified column from the layout
+    */
+    public String getHeadingAt(int column) {
+        return this.headings.get(column);
+    }
     
-    
+    public ArrayList<String> getHeadingFromTo(int from, int to) {
+        ArrayList<String> listofHeadings = new ArrayList<>();
+        for (int column = from; column <= to; column++) {
+            listofHeadings.add(this.headings.get(column));
+        }
+        return listofHeadings;
+    }
+
 }

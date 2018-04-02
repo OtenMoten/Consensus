@@ -97,7 +97,7 @@ public class MetaDataTable {
     }
     /**
      * <b>Getter</b> <br>
-     * The native order is was not changed. It's a final value.
+     * The native order was not changed. It's a final value.
      * @since Release (1st July 2018)
      *  @return The headings from the metadata table
     */
@@ -124,7 +124,7 @@ public class MetaDataTable {
     }
     /**
      * <b>Getter</b> <br>
-     * @param column representing a Integer
+     * @param column represented by a Integer
      * @since Release (1st July 2018)
      * @return A heading by a specified column from the metadata.
     */
@@ -133,7 +133,7 @@ public class MetaDataTable {
     }
     /**
      * <b>Getter</b> <br>
-     * @param row representing a Integer
+     * @param row represented by a Integer
      * @since Release (1st July 2018)
      * @return All elements within a sepcified row from the metadata table
     */
@@ -142,7 +142,7 @@ public class MetaDataTable {
     }
     /**
      * <b>Getter</b> <br>
-     * @param column representing a Integer
+     * @param column represented by a Integer
      * @since Release (1st July 2018)
      * @return All elements within a sepcified column from the metadata table
     */
@@ -152,6 +152,19 @@ public class MetaDataTable {
             columnElements.add(table.get(row).get(column));
         }
         return columnElements;
+    }
+    /**
+     * <b>Getter</b> <br>
+     * @param heading represented by a String
+     * @return The ID of the column from the metadata table, -1 if heading was not found
+     * @since Release (1st July 2018)
+     */
+    public int getColumnID(String heading) {
+        int columnID = -1;
+        for (int column = 0; column < this.columnCount; column++) {
+            if(this.headings.get(column).equals(heading)) {columnID = column; break;}
+        }
+        return columnID;
     }
     /**
      * <b>Getter</b> <br>

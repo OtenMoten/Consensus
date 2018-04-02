@@ -171,6 +171,5 @@ public class MetaDataTable {
             }
         }
         return areaElements;
-    }
-    
+    }  
 }

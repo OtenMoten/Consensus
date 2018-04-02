@@ -27,7 +27,7 @@ public class FXMLController implements Initializable {
 
         FileReader fileReader = new FileReader("userDataTable.xls", "", "layout.csv");
         
-        ArrayList<ArrayList<String>> userDataTable = fileReader.readInUserDataTable();
+        ArrayList<ArrayList<String>> userDataTable = fileReader.readInUserDataTableHSSF();
         ArrayList<String> layout = fileReader.readInLayout(";");
         
         System.out.println("USER DATA TABLE");

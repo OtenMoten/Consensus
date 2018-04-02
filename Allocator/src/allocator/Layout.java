@@ -71,7 +71,13 @@ public class Layout {
     public String getHeadingAt(int column) {
         return this.headings.get(column);
     }
-    
+    /**
+     * <b>Getter</b> <br>
+     * @param from represents the start by a columnID as Intger
+     * @param to represents the end by a columnID as Intger
+     * @since Release (1st July 2018)
+     * @return All elements within a sepcified range from the layout
+    */
     public ArrayList<String> getHeadingFromTo(int from, int to) {
         ArrayList<String> listofHeadings = new ArrayList<>();
         for (int column = from; column <= to; column++) {

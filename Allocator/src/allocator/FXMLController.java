@@ -24,52 +24,17 @@ public class FXMLController implements Initializable {
     
     @FXML
     private void handleButtonAction(ActionEvent event) {
+
+        FileReader fileReader = new FileReader("userDataTable.xls", "", "");
+        ArrayList<ArrayList<String>> userDataTable = fileReader.readInUserDataTable(fileReader.getPathUserDataTable());
         
-        ArrayList<ArrayList<String>> myTable = new ArrayList<>(0);
-        int counter = 0;
-        for (int row = 0; row < 3; row++) {
-            myTable.add(new ArrayList<>());
-            for (int column = 0; column < 10; column++) {
-               myTable.get(row).add(String.valueOf(++counter));
-            }
-        }
-        
-        UserDataTable userDataTable = new UserDataTable(myTable);
-        
-        System.out.println("*** The Table ***");
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 10; column++) {
-               System.out.print(userDataTable.getUserDataTable().get(row).get(column) + " ");
+        for (int row = 0; row < userDataTable.size(); row++) {
+            for (int column = 0; column < userDataTable.get(0).size(); column++) {
+                System.out.print(userDataTable.get(row).get(column) + " \t\t ");
             }
             System.out.println();
         }
-        
-        System.out.println("*** The Headings ***");
-        for (int column = 0; column < 10; column++) {
-            System.out.print(userDataTable.getUserDataHeadings().get(column) + " ");
-        } System.out.println("");
-        
-        System.out.println("*** Payload ***");
-        for (int row = 0; row < 2; row++) {
-            for (int column = 0; column < 10; column++) {
-               System.out.print(userDataTable.getUserDataTable().get(row).get(column) + " ");
-            }
-            System.out.println();
-        }
-        
-        System.out.println("*** getColumnAt() ***");
-        for (int element = 0; element < userDataTable.getUserDataTableRowCount(); element++) {
-            System.out.print(userDataTable.getColumnAt(9).get(element) + " ");
-        } System.out.println();
-        
-        System.out.println("*** getArea() ***");
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.print(userDataTable.getArea(0, 0, 2, 2).get(i).get(j) + " ");
-            }
-            System.out.println();
-        }
-        
+
     }
     
     @Override

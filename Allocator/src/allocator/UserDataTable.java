@@ -53,7 +53,7 @@ public class UserDataTable {
      * > Seperate the headings. <br>
      * > Seperate the payload. <br>r>
      *
-     * @param userDataTable Representing a two-dimensional String ArrayList
+     * @param userDataTable represents a two-dimensional String ArrayList
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index > size())
      * @throws NullPointerException if the specified collection is null
      * @throws ClassCastException if the class of an element of this list is incompatible with the specified collection

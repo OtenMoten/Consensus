@@ -34,15 +34,15 @@ public class FileReader {
     
     /** The path to the .xls/.xlsx file where the userdata table is within.
      * @since Release (1st July 2018)
-    */
+     */
     private final String pathUserDataTable;
     /** The path to the .XML file where the metadata is within.
      * @since Release (1st July 2018)
-    */
+     */
     private final String pathMetaDataTable;
     /** The path to the CSV file where the layout is within.
      * @since Release (1st July 2018)
-    */
+     */
     private final String pathLayout;
     
     /**
@@ -58,7 +58,7 @@ public class FileReader {
      * @throws IllegalArgumentException if the endpoint indices are out of order (fromIndex > toInde
      * @throws ConcurrentModificationException if the list is structurally modified at any time after the iterator is created, in any way except through the iterator's own remove or add methods
      * @since Release (1st July 2018)
-    */
+     */
     public FileReader(String pathToUserDataTable, String pathToMetaData, String pathToLayout) {
         this.pathUserDataTable = pathToUserDataTable;
         this.pathMetaDataTable = pathToMetaData;
@@ -69,7 +69,7 @@ public class FileReader {
      * <b>Getter</b> <br>
      * @since Release (1st July 2018)
      * @return Path to the Excel file where the userdata table is within
-    */
+     */
     public String getPathUserDataTable() {
         return this.pathUserDataTable;
     }
@@ -77,7 +77,7 @@ public class FileReader {
      * <b>Getter</b> <br>
      * @since Release (1st July 2018)
      * @return Path to the XML file where the metadata is within
-    */
+     */
     public String getPathMetaDataTable() {
         return this.pathMetaDataTable;
     }
@@ -85,7 +85,7 @@ public class FileReader {
      * <b>Getter</b> <br>
      * @since Release (1st July 2018)
      * @return Path to the CSV file where the layout is within
-    */
+     */
     public String getPathLayout() {
         return this.pathLayout;
     }
@@ -93,7 +93,7 @@ public class FileReader {
     /**
      * HSSF for .xls files >= Excel 97 & <= Excel 2005
      * @return The userdata Table from the Excel file as a two-dimensional String ArrayList
-    */
+     */
     public ArrayList<ArrayList<String>> readInUserDataTableHSSF (/*, char floatingPointChar*/) {
         File excelFile = new File(this.pathUserDataTable);
         //char floatingPoint = floatingPointChar; //Can be either a "." or a "," //Error handling in GUI
@@ -197,7 +197,7 @@ public class FileReader {
     /**
      * XSSF for .xls files > Excel 2005
      * @return The userdata Table from the Excel file as a two-dimensional String ArrayList
-    */
+     */
     public ArrayList<ArrayList<String>> readInUserDataTableXSSF (/*, char floatingPointChar*/) {
         File excelFile = new File(this.pathUserDataTable);
         //char floatingPoint = floatingPointChar; //Can be either a "." or a "," //Error handling in GUI
@@ -302,7 +302,7 @@ public class FileReader {
      * The seeperator between each heading in the CSV file is configurable
      * @param csvSplitBy represented by a String
      * @return The headings of the layout as a one-dimensional String ArrayList
-    */
+     */
     public ArrayList<String> readInLayout (String csvSplitBy) {
         BufferedReader bufferedReader;
         String textLine;

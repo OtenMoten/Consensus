@@ -21,6 +21,9 @@ public class FXMLController implements Initializable {
     Layout layout;
     FileReader fileReader;
     
+    /**
+     * 
+     */
     @FXML
     private void readInDataAll() {
 
@@ -31,7 +34,7 @@ public class FXMLController implements Initializable {
         this.fileReader.readInMetaDataTable();
         this.layout = new Layout(fileReader.readInLayout(";"));
         
-        System.out.println("USER DATA TABLE");
+        System.out.println("USER DATA TABLE PAYLOAD");
         for (int row = 0; row < this.userDataTable.getRowCount(); row++) {
             for (int column = 0; column < this.userDataTable.getColumnCount(); column++) {
                 System.out.print(this.userDataTable.getElementAt(row, column) + " \t ");

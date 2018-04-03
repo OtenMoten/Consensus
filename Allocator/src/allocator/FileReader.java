@@ -17,6 +17,9 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -26,6 +29,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * @author Kevin Ossenbrueck
@@ -196,10 +205,12 @@ public class FileReader {
     }
     /**
      * XSSF for .xls files > Excel 2005
-     * @return The userdata Table from the Excel file as a two-dimensional String ArrayList
+     * @return The userdata table from the Excel file as a two-dimensional String ArrayList
      */
     public ArrayList<ArrayList<String>> readInUserDataTableXSSF (/*, char floatingPointChar*/) {
         File excelFile = new File(this.pathUserDataTable);
+        ArrayList<ArrayList<String>> userDataTable = new ArrayList<>();
+        Alert alert = new Alert(Alert.AlertType.WARNING);
         //char floatingPoint = floatingPointChar; //Can be either a "." or a "," //Error handling in GUI
         XSSFWorkbook workbook;
         XSSFSheet spreadsheet;
@@ -207,11 +218,9 @@ public class FileReader {
         Iterator< Cell > cellIterator;
         XSSFRow row;
         Cell cell;
-        ArrayList<ArrayList<String>> userDataTable = new ArrayList<>();
         int numberOfRows;
         int numberOfColumns;
         int rowNumber = 0;
-        Alert alert = new Alert(Alert.AlertType.WARNING);
         
         try (FileInputStream excelFileInputStream = new FileInputStream(excelFile)) {
             workbook = new XSSFWorkbook(excelFileInputStream); //Create a virtual copy of the Excel file
@@ -297,6 +306,36 @@ public class FileReader {
             Logger.getLogger(FileReader.class.getName()).log(Level.SEVERE, null, ex);
         }
         return userDataTable;
+    }
+    /**
+     * Transform the metadata within an XML file into a two-dimensional table.
+     * @return The metadata from the XML file represented by two-dimensional String ArrayList
+     */
+    public ArrayList<ArrayList<String>> readInMetaDataTable() {
+        ArrayList<ArrayList<String>> metaDataTable = new ArrayList<>();
+        File xmlFile = new File(this.pathMetaDataTable);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        
+        try {
+            DocumentBuilder documentBuilder = dbFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(xmlFile);
+            document.getDocumentElement().normalize();
+
+            NodeList nodeList = document.getChildNodes().item(0).getChildNodes().item(0).getChildNodes().item(0).getChildNodes();
+            
+            for (int row = 0; row < 2; row++) {
+                metaDataTable.add(new ArrayList<>());
+                for (int column = 0; column < nodeList.getLength(); column++) {
+                    Element elementOfNode = (Element) nodeList.item(column);
+                    if(row == 0) {
+                        metaDataTable.get(row).add(elementOfNode.getNodeName());
+                    } else {
+                        metaDataTable.get(row).add(elementOfNode.getTextContent());
+                    }
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {}
+        return metaDataTable;
     }
     /**
      * The seeperator between each heading in the CSV file is configurable

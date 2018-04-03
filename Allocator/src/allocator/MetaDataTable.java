@@ -32,13 +32,13 @@ public class MetaDataTable {
      * Every element of the payload will be internal handled as a String.
      * @since Release (1st July 2018)
      */
-    private final ArrayList<ArrayList<String>> payload;
+    private final ArrayList<String> payload;
     /**
      * The count of rows at the metadata table, represented by a Integer.
      * The first line with the headings <b>is counted</b> too.
      * @since Release (1st July 2018)
      */
-    private final int rowCount;
+    private final int rowCount = 2;
     /**
      * The count of columns at the metadata table, represented by a Integer.
      * @since Release (1st July 2018)
@@ -63,11 +63,9 @@ public class MetaDataTable {
      */
     public MetaDataTable(ArrayList<ArrayList<String>> metaDataTable) {
         this.table = metaDataTable;
-        this.rowCount = metaDataTable.size();
         this.columnCount = metaDataTable.get(0).size();
         this.headings = metaDataTable.get(0);
-        this.payload = new ArrayList<>(metaDataTable);
-        this.payload.remove(0);       
+        this.payload = metaDataTable.get(1);
     }
     
     /**
@@ -75,7 +73,7 @@ public class MetaDataTable {
      * @since Release (1st July 2018)
      * @return Headings and payload
      */
-    public ArrayList<ArrayList<String>> getMetaDataTable() {
+    public ArrayList<ArrayList<String>> getTable() {
         return this.table;
     }
     /**
@@ -84,7 +82,7 @@ public class MetaDataTable {
      * @since Release (1st July 2018)
      * @return Number of rows at the metadata table
      */
-    public int getMetaDataTableRowCount(){
+    public int getRowCount(){
         return this.rowCount;
     }
     /**
@@ -92,7 +90,7 @@ public class MetaDataTable {
      * @since Release (1st July 2018)
      * @return The number of columns at the metadata table
      */
-    public int getMetaDataTableColumnCount() {
+    public int getColumnCount() {
         return this.columnCount;
     }
     /**
@@ -101,7 +99,7 @@ public class MetaDataTable {
      * @since Release (1st July 2018)
      *  @return The headings from the metadata table
      */
-    public ArrayList<String> getMetaDataHeadings() {
+    public ArrayList<String> getHeadings() {
         return this.headings;
     }
     /**
@@ -109,7 +107,7 @@ public class MetaDataTable {
      * @since Release (1st July 2018)
      * @return The metadata table without headings.
      */
-    public ArrayList<ArrayList<String>> getMetaDataPayload() {
+    public ArrayList<String> getPayload() {
         return this.payload;
     }
     /**

@@ -6,12 +6,9 @@
 package allocator;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 
 /**
  *
@@ -19,30 +16,43 @@ import javafx.scene.control.Label;
  */
 public class FXMLController implements Initializable {
     
-    @FXML
-    private Label label;
+    UserDataTable userDataTable;
+    MetaDataTable metaDataTable;
+    Layout layout;
+    FileReader fileReader;
     
     @FXML
-    private void handleButtonAction(ActionEvent event) {
+    private void readInDataAll() {
 
-        FileReader fileReader = new FileReader("userDataTable.xls", "", "layout.csv");
+        this.fileReader = new FileReader("userDataTable.xls", "metadata.xml", "layout.csv");
         
-        ArrayList<ArrayList<String>> userDataTable = fileReader.readInUserDataTableHSSF();
-        ArrayList<String> layout = fileReader.readInLayout(";");
+        this.userDataTable = new UserDataTable(fileReader.readInUserDataTableHSSF());
+        this.metaDataTable = new MetaDataTable(fileReader.readInMetaDataTable());
+        this.fileReader.readInMetaDataTable();
+        this.layout = new Layout(fileReader.readInLayout(";"));
         
         System.out.println("USER DATA TABLE");
-        for (int row = 0; row < userDataTable.size(); row++) {
-            for (int column = 0; column < userDataTable.get(0).size(); column++) {
-                System.out.print(userDataTable.get(row).get(column) + "\t");
+        for (int row = 0; row < this.userDataTable.getRowCount(); row++) {
+            for (int column = 0; column < this.userDataTable.getColumnCount(); column++) {
+                System.out.print(this.userDataTable.getElementAt(row, column) + " \t ");
             }
             System.out.println();
         }
         
         System.out.println("LAYOUT");
-        for (int column = 0; column < layout.size(); column++) {
-            System.out.print(layout.get(column) + " ");
+        for (int column = 0; column < this.layout.columnCount; column++) {
+            System.out.print(this.layout.getHeadingAt(column) + " ");
         }
-
+        
+        System.out.println();
+        System.out.println("META DATA TABLE PAYLOAD");
+        for (int i = 0; i < this.metaDataTable.getColumnCount(); i++) {
+                System.out.println(this.metaDataTable.getPayload().get(i));
+        }
+        System.out.println("META DATA TABLE HEADINGS");
+        for (int i = 0; i < this.metaDataTable.getColumnCount(); i++) {
+                System.out.println(this.metaDataTable.getHeadings().get(i));
+        }
     }
     
     @Override

@@ -75,7 +75,7 @@ public class UserDataTable {
      * @since Release (1st July 2018)
      * @return Headings and payload
      */
-    public ArrayList<ArrayList<String>> getUserDataTable() {
+    public ArrayList<ArrayList<String>> getTable() {
         return this.table;
     }
     /**
@@ -84,7 +84,7 @@ public class UserDataTable {
      * @since Release (1st July 2018)
      * @return Number of rows at the userdata table
      */
-    public int getUserDataTableRowCount(){
+    public int getRowCount(){
         return this.rowCount;
     }
     /**
@@ -92,7 +92,7 @@ public class UserDataTable {
      * @since Release (1st July 2018)
      * @return The number of columns at the userdata table
      */
-    public int getUserDataTableColumnCount() {
+    public int getColumnCount() {
         return this.columnCount;
     }
     /**
@@ -101,7 +101,7 @@ public class UserDataTable {
      * @since Release (1st July 2018)
      *  @return The headings from the userdata table
      */
-    public ArrayList<String> getUserDataHeadings() {
+    public ArrayList<String> getHeadings() {
         return this.headings;
     }
     /**
@@ -109,7 +109,7 @@ public class UserDataTable {
      * @since Release (1st July 2018)
      * @return The userdata table without headings.
      */
-    public ArrayList<ArrayList<String>> getUserDataPayload() {
+    public ArrayList<ArrayList<String>> getPayload() {
         return this.payload;
     }
     /**

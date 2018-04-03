@@ -18,13 +18,13 @@ import javafx.stage.Stage;
 public class Allocator extends Application {
     
     @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("GUI.fxml"));
+    public void start(Stage rootStage) throws Exception {
+        Parent rootParent = FXMLLoader.load(getClass().getResource("GUI.fxml"));
         
-        Scene scene = new Scene(root);
+        Scene rootScene = new Scene(rootParent);
         
-        stage.setScene(scene);
-        stage.show();
+        rootStage.setScene(rootScene);
+        rootStage.show();
     }
 
     /**

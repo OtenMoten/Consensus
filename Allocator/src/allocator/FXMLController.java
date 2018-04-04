@@ -22,11 +22,13 @@ public class FXMLController implements Initializable {
     FileReader fileReader;
     
     /**
-     * 
+     * <b>Constructor</b> <br>
+     * @since Release (1st July 2018)
      */
-    @FXML
-    private void readInDataAll() {
 
+    @FXML
+    public void readInAll() {
+        
         this.fileReader = new FileReader("userDataTable.xls", "metadata.xml", "layout.csv");
         
         this.userDataTable = new UserDataTable(fileReader.readInUserDataTableHSSF());
@@ -56,7 +58,10 @@ public class FXMLController implements Initializable {
         for (int i = 0; i < this.metaDataTable.getColumnCount(); i++) {
                 System.out.println(this.metaDataTable.getHeadings().get(i));
         }
+        
+        
     }
+
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -105,7 +105,7 @@ public class MetaDataTable {
     /**
      * <b>Getter</b> <br>
      * @since Release (1st July 2018)
-     * @return The metadata table without headings.
+     * @return The metadata table without headings
      */
     public ArrayList<String> getPayload() {
         return this.payload;
@@ -124,7 +124,7 @@ public class MetaDataTable {
      * <b>Getter</b> <br>
      * @param column represented by a Integer
      * @since Release (1st July 2018)
-     * @return A heading by a specified column from the metadata.
+     * @return A heading by a specified column from the metadata table
      */
     public String getHeadingAt(int column) {
         return headings.get(column);

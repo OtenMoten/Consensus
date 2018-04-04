@@ -99,7 +99,7 @@ public class UserDataTable {
      * <b>Getter</b> <br>
      * The native order was not changed. It's a final value.
      * @since Release (1st July 2018)
-     *  @return The headings from the userdata table
+     * @return The headings from the userdata table
      */
     public ArrayList<String> getHeadings() {
         return this.headings;
@@ -107,7 +107,7 @@ public class UserDataTable {
     /**
      * <b>Getter</b> <br>
      * @since Release (1st July 2018)
-     * @return The userdata table without headings.
+     * @return The userdata table without headings
      */
     public ArrayList<ArrayList<String>> getPayload() {
         return this.payload;
@@ -126,7 +126,7 @@ public class UserDataTable {
      * <b>Getter</b> <br>
      * @param column represented by a Integer
      * @since Release (1st July 2018)
-     * @return A heading by a specified column from the userdata
+     * @return A heading by a specified column from the userdata table
      */
     public String getHeadingAt(int column) {
         return headings.get(column);

@@ -46,12 +46,12 @@ public class MetaDataTable {
     private final int columnCount;
     
     /**
-     * <b>Constructor</b> <br>
-     * > Set up the metadata table as a two-dimensional ArrayList. <br>
-     * > Set up the number of rows. <br>
-     * > Set up the number of columns. <br>
-     * > Seperate the headings. <br>
-     * > Seperate the payload. <br>r>
+     * <b>Constructor</b> <p>
+     * > Set up the metadata table as a two-dimensional ArrayList. <p>
+     * > Set up the number of rows. <p>
+     * > Set up the number of columns. <p>
+     * > Seperate the headings. <p>
+     * > Seperate the payload. <p>r>
      *
      * @param metaDataTable two-dimensional String ArrayList
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index > size())
@@ -69,7 +69,7 @@ public class MetaDataTable {
     }
     
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @since Release (1st July 2018)
      * @return Headings and payload
      */
@@ -77,7 +77,7 @@ public class MetaDataTable {
         return this.table;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * The headings line is <u>included</u>.
      * @since Release (1st July 2018)
      * @return Number of rows at the metadata table
@@ -86,7 +86,7 @@ public class MetaDataTable {
         return this.rowCount;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @since Release (1st July 2018)
      * @return The number of columns at the metadata table
      */
@@ -94,7 +94,7 @@ public class MetaDataTable {
         return this.columnCount;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * The native order was not changed. It's a final value.
      * @since Release (1st July 2018)
      *  @return The headings from the metadata table
@@ -103,7 +103,7 @@ public class MetaDataTable {
         return this.headings;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @since Release (1st July 2018)
      * @return The metadata table without headings
      */
@@ -111,7 +111,7 @@ public class MetaDataTable {
         return this.payload;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param x Representing a row
      * @param y Representing a column
      * @since Release (1st July 2018)
@@ -121,7 +121,7 @@ public class MetaDataTable {
         return this.table.get(x).get(y);
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param column represented by a Integer
      * @since Release (1st July 2018)
      * @return A heading by a specified column from the metadata table
@@ -130,7 +130,7 @@ public class MetaDataTable {
         return headings.get(column);
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param row represented by a Integer
      * @since Release (1st July 2018)
      * @return All elements within a sepcified row from the metadata table
@@ -139,7 +139,7 @@ public class MetaDataTable {
         return table.get(row);
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param column represented by a Integer
      * @since Release (1st July 2018)
      * @return All elements within a sepcified column from the metadata table
@@ -152,7 +152,7 @@ public class MetaDataTable {
         return columnElements;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param heading represented by a String
      * @return The ID of the column from the metadata table, -1 if heading was not found
      * @since Release (1st July 2018)
@@ -165,7 +165,7 @@ public class MetaDataTable {
         return columnID;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param fromX Representing a start row
      * @param fromY Representing a start column
      * @param toX Representing a end row

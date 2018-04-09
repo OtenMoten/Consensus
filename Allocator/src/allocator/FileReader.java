@@ -55,7 +55,7 @@ public class FileReader {
     private final String pathLayout;
     
     /**
-     * <b>Constructor</b> <br>
+     * <b>Constructor</b> <p>
      * > Set up the paths to the files.
      *
      * @param pathToUserDataTable represents a String to a Excel file
@@ -75,7 +75,7 @@ public class FileReader {
     }
 
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @since Release (1st July 2018)
      * @return Path to the Excel file where the userdata table is within
      */
@@ -83,7 +83,7 @@ public class FileReader {
         return this.pathUserDataTable;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @since Release (1st July 2018)
      * @return Path to the XML file where the metadata is within
      */
@@ -91,7 +91,7 @@ public class FileReader {
         return this.pathMetaDataTable;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @since Release (1st July 2018)
      * @return Path to the CSV file where the layout is within
      */

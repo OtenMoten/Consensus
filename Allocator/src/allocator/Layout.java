@@ -28,9 +28,9 @@ public class Layout {
     public final int columnCount;
     
     /**
-     * <b>Constructor</b> <br>
-     * > Set up the layout as a one-dimensional ArrayList. <br>
-     * > Set up the number of columns. <br>
+     * <b>Constructor</b> <p>
+     * > Set up the layout as a one-dimensional ArrayList. <p>
+     * > Set up the number of columns. <p>
      *
      * @param layout one-dimensional String ArrayList
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index > size())
@@ -46,7 +46,7 @@ public class Layout {
     }
 
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * The native order was not changed. It's a final value.
      * @since Release (1st July 2018)
      *  @return The headings from the layout
@@ -55,7 +55,7 @@ public class Layout {
         return this.headings;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @since Release (1st July 2018)
      * @return The number of columns at the layout
      */
@@ -63,7 +63,7 @@ public class Layout {
         return this.columnCount;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param column representing a Integer
      * @since Release (1st July 2018)
      * @return A heading by a specified column from the layout
@@ -72,7 +72,7 @@ public class Layout {
         return this.headings.get(column);
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param from represents the start by a columnID as Intger
      * @param to represents the end by a columnID as Intger
      * @since Release (1st July 2018)

@@ -46,12 +46,12 @@ public class UserDataTable {
     private final int columnCount;
     
     /**
-     * <b>Constructor</b> <br>
-     * > Set up the userdata table as a two-dimensional ArrayList. <br>
-     * > Set up the number of rows. <br>
-     * > Set up the number of columns. <br>
-     * > Seperate the headings. <br>
-     * > Seperate the payload. <br>r>
+     * <b>Constructor</b> <p>
+     * > Set up the userdata table as a two-dimensional ArrayList. <p>
+     * > Set up the number of rows. <p>
+     * > Set up the number of columns. <p>
+     * > Seperate the headings. <p>
+     * > Seperate the payload. <p>r>
      *
      * @param userDataTable represents a two-dimensional String ArrayList
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index > size())
@@ -71,7 +71,7 @@ public class UserDataTable {
     }
     
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @since Release (1st July 2018)
      * @return Headings and payload
      */
@@ -79,7 +79,7 @@ public class UserDataTable {
         return this.table;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * The headings line is <u>included</u>.
      * @since Release (1st July 2018)
      * @return Number of rows at the userdata table
@@ -88,7 +88,7 @@ public class UserDataTable {
         return this.rowCount;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @since Release (1st July 2018)
      * @return The number of columns at the userdata table
      */
@@ -96,7 +96,7 @@ public class UserDataTable {
         return this.columnCount;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * The native order was not changed. It's a final value.
      * @since Release (1st July 2018)
      * @return The headings from the userdata table
@@ -105,7 +105,7 @@ public class UserDataTable {
         return this.headings;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @since Release (1st July 2018)
      * @return The userdata table without headings
      */
@@ -113,53 +113,55 @@ public class UserDataTable {
         return this.payload;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param x Representing a row
      * @param y Representing a column
      * @since Release (1st July 2018)
-     * @return A element at specified coodinates
+     * @return A element at specified coodinates. Return NULL if X and/or Y exceeds the size of table
      */
     public String getElementAt(int x, int y) {
-        return table.get(x).get(y);
+        if(x < this.rowCount && y < this.columnCount) {
+            return this.table.get(x).get(y);
+        } else {return null;} 
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param column represented by a Integer
      * @since Release (1st July 2018)
      * @return A heading by a specified column from the userdata table
      */
     public String getHeadingAt(int column) {
-        return headings.get(column);
+        return this.headings.get(column);
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param row represented by a Integer
      * @since Release (1st July 2018)
      * @return All elements within a sepcified row from the userdata table
      */
     public ArrayList<String> getRowAt(int row) {
-        return table.get(row);
+        return this.table.get(row);
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param column represented by a Integer
      * @since Release (1st July 2018)
      * @return All elements within a sepcified column from the userdata table
      */
     public ArrayList<String> getColumnAt(int column) {
-        ArrayList<String> columnElements = new ArrayList<>(rowCount);
-        for (int row = 0; row < rowCount; row++) {
-            columnElements.add(table.get(row).get(column));
+        ArrayList<String> columnElements = new ArrayList<>(this.rowCount);
+        for (int row = 0; row < this.rowCount; row++) {
+            columnElements.add(this.table.get(row).get(column));
         }
         return columnElements;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param heading represented by a String
      * @return The ID of the column from the userdata table, -1 if heading was not found
      * @since Release (1st July 2018)
      */
-    public int getColumnID(String heading) {
+    public int getColumnIDbyHeading(String heading) {
         int columnID = -1;
         for (int column = 0; column < this.columnCount; column++) {
             if(this.headings.get(column).equals(heading)) {columnID = column; break;}
@@ -167,7 +169,7 @@ public class UserDataTable {
         return columnID;
     }
     /**
-     * <b>Getter</b> <br>
+     * <b>Getter</b> <p>
      * @param fromX Representing a start row
      * @param fromY Representing a start column
      * @param toX Representing a end row
@@ -176,9 +178,9 @@ public class UserDataTable {
      * @return All elements within a sepcified area from the userdata table
      */
     public ArrayList<ArrayList<String>> getArea(int fromX, int fromY, int toX, int toY) {
-        ArrayList<ArrayList<String>> areaElements = new ArrayList<>(0);
+        ArrayList<ArrayList<String>> areaElements = new ArrayList<>((toX - fromX) + 1);
         for (int row = fromX; row <= toX; row++) {
-            areaElements.add(new ArrayList<>(0));
+            areaElements.add(new ArrayList<>((toY - fromY) + 1));
             for (int column = fromY; column <= toY; column++) {
                 areaElements.get(areaElements.size()-1).add(this.table.get(row).get(column));
             }

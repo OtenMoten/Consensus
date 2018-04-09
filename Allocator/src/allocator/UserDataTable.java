@@ -178,13 +178,15 @@ public class UserDataTable {
      * @return All elements within a sepcified area from the userdata table
      */
     public ArrayList<ArrayList<String>> getArea(int fromX, int fromY, int toX, int toY) {
-        ArrayList<ArrayList<String>> areaElements = new ArrayList<>((toX - fromX) + 1);
-        for (int row = fromX; row <= toX; row++) {
-            areaElements.add(new ArrayList<>((toY - fromY) + 1));
-            for (int column = fromY; column <= toY; column++) {
-                areaElements.get(areaElements.size()-1).add(this.table.get(row).get(column));
+        if(fromX <= toX && fromY <= toY) {
+            ArrayList<ArrayList<String>> areaElements = new ArrayList<>((toX - fromX) + 1);
+            for (int row = fromX; row <= toX; row++) {
+                areaElements.add(new ArrayList<>((toY - fromY) + 1));
+                for (int column = fromY; column <= toY; column++) {
+                    areaElements.get(areaElements.size()-1).add(this.table.get(row).get(column));
+                }
             }
-        }
-        return areaElements;
+            return areaElements;
+        } else {return null;}
     }
 }

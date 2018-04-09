@@ -118,7 +118,9 @@ public class MetaDataTable {
      * @return A element at specified coodinates
      */
     public String getElementAt(int x, int y) {
-        return this.table.get(x).get(y);
+        if(x < this.rowCount && y < this.columnCount) {
+            return this.table.get(x).get(y);
+        } else {return null;} 
     }
     /**
      * <b>Getter</b> <p>
@@ -127,7 +129,7 @@ public class MetaDataTable {
      * @return A heading by a specified column from the metadata table
      */
     public String getHeadingAt(int column) {
-        return headings.get(column);
+        return this.headings.get(column);
     }
     /**
      * <b>Getter</b> <p>
@@ -136,7 +138,7 @@ public class MetaDataTable {
      * @return All elements within a sepcified row from the metadata table
      */
     public ArrayList<String> getRowAt(int row) {
-        return table.get(row);
+        return this.table.get(row);
     }
     /**
      * <b>Getter</b> <p>
@@ -145,9 +147,9 @@ public class MetaDataTable {
      * @return All elements within a sepcified column from the metadata table
      */
     public ArrayList<String> getColumnAt(int column) {
-        ArrayList<String> columnElements = new ArrayList<>(rowCount);
-        for (int row = 0; row < rowCount; row++) {
-            columnElements.add(table.get(row).get(column));
+        ArrayList<String> columnElements = new ArrayList<>(this.rowCount);
+        for (int row = 0; row < this.rowCount; row++) {
+            columnElements.add(this.table.get(row).get(column));
         }
         return columnElements;
     }
@@ -157,7 +159,7 @@ public class MetaDataTable {
      * @return The ID of the column from the metadata table, -1 if heading was not found
      * @since Release (1st July 2018)
      */
-    public int getColumnID(String heading) {
+    public int getColumnIDbyHeading(String heading) {
         int columnID = -1;
         for (int column = 0; column < this.columnCount; column++) {
             if(this.headings.get(column).equals(heading)) {columnID = column; break;}
@@ -174,13 +176,15 @@ public class MetaDataTable {
      * @return All elements within a sepcified area from the metadata table
      */
     public ArrayList<ArrayList<String>> getArea(int fromX, int fromY, int toX, int toY) {
-        ArrayList<ArrayList<String>> areaElements = new ArrayList<>(0);
-        for (int row = fromX; row <= toX; row++) {
-            areaElements.add(new ArrayList<>(0));
-            for (int column = fromY; column <= toY; column++) {
-                areaElements.get(areaElements.size()-1).add(this.table.get(row).get(column));
+        if(fromX <= toX && fromY <= toY) {
+            ArrayList<ArrayList<String>> areaElements = new ArrayList<>((toX - fromX) + 1);
+            for (int row = fromX; row <= toX; row++) {
+                areaElements.add(new ArrayList<>((toY - fromY) + 1));
+                for (int column = fromY; column <= toY; column++) {
+                    areaElements.get(areaElements.size()-1).add(this.table.get(row).get(column));
+                }
             }
-        }
-        return areaElements;
+            return areaElements;
+        } else {return null;}
     }  
 }

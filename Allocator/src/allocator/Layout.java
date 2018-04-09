@@ -20,12 +20,12 @@ public class Layout {
      * The native order will not be changed.
      * @since Release (1st July 2018)
      */
-    public final ArrayList<String> headings;
+    private final ArrayList<String> headings;
     /**
      * The count of columns at the layout, represented by a Integer.
      * @since Release (1st July 2018)
      */
-    public final int columnCount;
+    private final int columnCount;
     
     /**
      * <b>Constructor</b> <p>
@@ -79,10 +79,12 @@ public class Layout {
      * @return All elements within a sepcified range from the layout
      */
     public ArrayList<String> getHeadingFromTo(int from, int to) {
-        ArrayList<String> listofHeadings = new ArrayList<>();
-        for (int column = from; column <= to; column++) {
-            listofHeadings.add(this.headings.get(column));
-        }
+        ArrayList<String> listofHeadings = new ArrayList<>((to - from) + 1);
+        if(from <= to) {
+            for (int column = from; column <= to; column++) {
+                listofHeadings.add(this.headings.get(column));
+            }
+        } else {return null;}
         return listofHeadings;
     }
 

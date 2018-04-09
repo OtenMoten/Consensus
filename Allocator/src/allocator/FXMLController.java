@@ -38,6 +38,7 @@ public class FXMLController implements Initializable {
         
         testUserDataTable();
         testMetaDataTable();
+        testLayout();
     }
     
     private void testUserDataTable() {
@@ -150,6 +151,33 @@ public class FXMLController implements Initializable {
         System.out.println(this.metaDataTable.getPayload());
     }
 
+    private void testLayout() {
+        System.out.println("Layout Class Test");
+        
+        System.out.println("Getting the headings");
+        System.out.println(this.layout.getHeadings());
+  
+        System.out.println("Getting the number of headings");
+        System.out.println(this.layout.getColumnCount());
+  
+        System.out.println("Getting a heading from a specified column");
+        for (int column = 0; column < this.layout.getColumnCount(); column++) {
+            System.out.println(this.layout.getHeadingAt(column));
+        }
+        
+        System.out.println("Getting headings in a specified range");
+        System.out.println(this.layout.getHeadingFromTo(2, 1));
+    
+    }
+    
+    private void testFinalTable() {
+        
+        
+        
+        
+        
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO

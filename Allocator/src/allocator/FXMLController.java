@@ -6,6 +6,8 @@
 package allocator;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +20,7 @@ public class FXMLController implements Initializable {
     
     UserDataTable userDataTable;
     MetaDataTable metaDataTable;
+    FinalTable finalTable;
     Layout layout;
     FileReader fileReader;
     
@@ -33,12 +36,13 @@ public class FXMLController implements Initializable {
         
         this.userDataTable = new UserDataTable(this.fileReader.readInUserDataTableHSSF());
         this.metaDataTable = new MetaDataTable(this.fileReader.readInMetaDataTable());
-        this.fileReader.readInMetaDataTable();
+        this.finalTable = new FinalTable();
         this.layout = new Layout(this.fileReader.readInLayout(";"));
         
-        testUserDataTable();
-        testMetaDataTable();
-        testLayout();
+        //testUserDataTable();
+        //testMetaDataTable();
+        //testLayout();
+        //testFinalTable();
     }
     
     private void testUserDataTable() {
@@ -171,11 +175,178 @@ public class FXMLController implements Initializable {
     }
     
     private void testFinalTable() {
+        System.out.println("FinalTable Class Test");
         
+        System.out.println("Setting a final table");
+        this.finalTable.setTable(this.userDataTable.getTable());
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+       
+        System.out.println("Setting a area in a final table");
+        this.finalTable.setArea(this.metaDataTable.getArea(0, 0, 1, 4), 1, 0, 2, 4);
         
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+
+        System.out.println("Setting a specified column in a final table");        
+        this.finalTable.setColumnAt(3, new ArrayList<>(Arrays.asList(new String[]{"A", "B", "C", "D", "E"})));
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
         
+        System.out.println("Checking Headings");
+        for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+            System.out.print(this.finalTable.getHeadings().get(column) + " ");
+        } System.out.println();
+        System.out.println();
         
+        System.out.println("Checking Payload");
+        for (int row = 0; row < this.finalTable.getRowCount() - 1; row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+                
+        System.out.println("Setting a specified row in a final table");
+        this.finalTable.setRowAt(1, new ArrayList<>(Arrays.asList(new String[]{"A", "B", "C", "D", "E"})));
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
         
+        System.out.println("Checking Headings");
+        for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+            System.out.print(this.finalTable.getHeadings().get(column) + " ");
+        } System.out.println();
+        System.out.println();
+        
+        System.out.println("Checking Payload");
+        for (int row = 0; row < this.finalTable.getRowCount() - 1; row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+   
+        System.out.println("Setting a specified element in the final table");
+        this.finalTable.setElementAt(3, 2, "ELEMENT AT");
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+        
+        System.out.println("Checking Headings");
+        for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+            System.out.print(this.finalTable.getHeadings().get(column) + " ");
+        } System.out.println();
+        System.out.println();
+        
+        System.out.println("Checking Payload");
+        for (int row = 0; row < this.finalTable.getRowCount() - 1; row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+        
+        System.out.println("Setting a specified heading in the final table");
+        this.finalTable.setHeadingAt(2, "SET HEADING AT");
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+        
+        System.out.println("Checking Headings");
+        for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+            System.out.print(this.finalTable.getHeadings().get(column) + " ");
+        } System.out.println();
+        System.out.println();
+        
+        System.out.println("Setting a specified payload in the final table");
+        this.finalTable.setPayload(this.fileReader.readInUserDataTableHSSF());
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+        
+        System.out.println("Checking Headings");
+        for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+            System.out.print(this.finalTable.getHeadings().get(column) + " ");
+        } System.out.println();
+        System.out.println();
+        
+        System.out.println("Checking Payload");
+        for (int row = 0; row < this.finalTable.getRowCount() - 1; row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+        
+        System.out.println("Setting specified headings in the final table");
+        this.finalTable.setHeadings(new ArrayList<>(Arrays.asList(new String[]{"V", "W", "X", "Y", "Z"})));
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+        
+        System.out.println("Checking Headings");
+        for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+            System.out.print(this.finalTable.getHeadings().get(column) + " ");
+        } System.out.println();
+        System.out.println();
+        
+        System.out.println("Checking Payload");
+        for (int row = 0; row < this.finalTable.getRowCount() - 1; row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+        
+        System.out.println("");
+        System.out.println("Checking");
+        System.out.println("Getter");
+        
+        System.out.println("Getting the final table");
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+        
+        System.out.println("getArea");
+        System.out.println(this.finalTable.getArea(0, 0, 2, 4));
+        
+        System.out.println("getColumnAt");
+        System.out.println(this.finalTable.getColumnAt(2));
+        
+        System.out.println("getColumnIDbyHeading");
+        System.out.println(this.finalTable.getColumnIDby("Y"));
+        
+        System.out.println("getElementAt");
+        System.out.println(this.finalTable.getElementAt(3, 2));
+        
+        System.out.println("getHeadingAt");
+        System.out.println(this.finalTable.getHeadingAt(3));
+        
+        System.out.println("getHeadings");
+        System.out.println(this.finalTable.getHeadings());
+        
+        System.out.println("getPayload");
+        System.out.println(this.finalTable.getPayload());
+        
+        System.out.println("getRowAt");
+        System.out.println(this.finalTable.getRowAt(2));
     }
     
     @Override

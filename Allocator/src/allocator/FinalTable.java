@@ -7,6 +7,7 @@ package allocator;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.ListIterator;
 
 /**
  *
@@ -61,11 +62,11 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public FinalTable() {
-        this.table = new ArrayList<>();
+        this.table = new ArrayList<>(0);
         this.rowCount = 0;
         this.columnCount = 0;
-        this.headings = new ArrayList<>();
-        this.payload = new ArrayList<>();    
+        this.headings = new ArrayList<>(1);
+        this.payload = new ArrayList<>(0);    
     }
     
     /**
@@ -73,7 +74,6 @@ public class FinalTable {
      * @param finalTable represented by a two-dimensional String ArrayList
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void setTable(ArrayList<ArrayList<String>> finalTable) {
         this.table = finalTable;
         this.rowCount = finalTable.size(); //The headings line is counted too!
@@ -103,7 +103,6 @@ public class FinalTable {
      * @param headings represented by a one-dimensional String ArrayList
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void setHeadings(ArrayList<String> headings) {
         this.table.set(0, headings);
         this.headings = headings;
@@ -111,15 +110,14 @@ public class FinalTable {
     /**
      * <b>Setter</b> <p>
      * @param payload represented by a two-dimensional String Array <p>
-     * "Payload" is meaning a final table without headings.
+     * "Payload" means a final table without headings.
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void setPayload(ArrayList<ArrayList<String>> payload) {
         this.payload = payload;
         for (int row = 1; row < this.rowCount; row++) {
             for (int column = 0; column < this.columnCount; column++) {
-                this.table.get(row).set(column, payload.get(row).get(column));
+                this.table.get(row).set(column, payload.get(row-1).get(column));
             }
         }
     }
@@ -129,7 +127,6 @@ public class FinalTable {
      * @param heading represented by a text String
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void setHeadingAt(int column, String heading) {
         this.table.get(0).set(column, heading);
         this.headings.set(column, heading);
@@ -141,12 +138,11 @@ public class FinalTable {
      * @param value Represented  by a String
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void setElementAt(int x, int y, String value) {
         this.table.get(x).set(y, value);
         //If x=0 it will change only a heading of the final table. 
         //Therefore, payload remains untouched.
-        this.headings.set(y, value);
+        if(x == 0) {this.headings.set(y, value);}
         if(x > 0) {this.payload.get(x-1).set(y, value);} 
     }
     /**
@@ -155,7 +151,6 @@ public class FinalTable {
      * @param rowContent represented by a one-dimensional String ArrayList 
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void setRowAt(int row, ArrayList<String> rowContent) {
         this.table.set(row, rowContent);
         //If x=0 it will change the whole headings of the final table
@@ -164,14 +159,14 @@ public class FinalTable {
     }
     /**
      * <b>Setter</b> <p>
-     * The columnContent is set up 1:1 in the final table.
+     * The columnContent is set up 1:1 at the specified column in the final table. <p>
+     * If are more elements in the columnContent than rows in the final table, then they are truncated.
      * @param column represented by a Integer
      * @param columnContent represented by a one-dimensional String ArrayList 
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void setColumnAt(int column, ArrayList<String> columnContent) {
-        for (int row = 0; row < rowCount; row++) {
+        for (int row = 0; row < this.rowCount; row++) {
             this.table.get(row).set(column, columnContent.get(row));
         }
     }
@@ -186,12 +181,14 @@ public class FinalTable {
      * @param toY Representing a end column
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void setArea(ArrayList<ArrayList<String>> areaContent, int fromX, int fromY, int toX, int toY) {
-        int areaRow = 0, areaColumn = 0;
-        for (int row = fromX; row <= toX; row++) {
-            for (int column = fromY; column <= toY; column++) {
-                this.table.get(row).add(column, areaContent.get(areaRow++).get(areaColumn++));
+        ListIterator<ArrayList<String>> rowElements = areaContent.listIterator();
+        ListIterator<String> columnElements;
+        
+        for (int row = fromX; row < (toX + 1); row++) {
+            columnElements = rowElements.next().listIterator();
+            for (int column = fromY; column < (toY + 1); column++) {
+                this.table.get(row).set(column, columnElements.next());
             }
         }
     }
@@ -223,8 +220,9 @@ public class FinalTable {
     }
     /**
      * <b>Getter</b> <p>
+     * The native order was not changed. It's a final value.
      * @since Release (1st July 2018)
-     * @return The headings from the userdata table
+     * @return The headings from the final table
      */
     public ArrayList<String> getHeadings() {
         return this.headings;
@@ -242,10 +240,12 @@ public class FinalTable {
      * @param x Representing a row
      * @param y Representing a column
      * @since Release (1st July 2018)
-     * @return A element at specified coodinates
+     * @return A element at specified coodinates. Return NULL if X and/or Y exceeds the size of table
      */
     public String getElementAt(int x, int y) {
-        return table.get(x).get(y);
+        if(x < this.rowCount && y < this.columnCount) {
+            return this.table.get(x).get(y);
+        } else {return null;} 
     }
     /**
      * <b>Getter</b> <p>
@@ -254,7 +254,7 @@ public class FinalTable {
      * @return A heading by a specified column from the final table
      */
     public String getHeadingAt(int column) {
-        return headings.get(column);
+        return this.headings.get(column);
     }
     /**
      * <b>Getter</b> <p>
@@ -263,7 +263,7 @@ public class FinalTable {
      * @return All elements within a sepcified row from the final table
      */
     public ArrayList<String> getRowAt(int row) {
-        return table.get(row);
+        return this.table.get(row);
     }
     /**
      * <b>Getter</b> <p>
@@ -272,9 +272,9 @@ public class FinalTable {
      * @return All elements within a sepcified column from the final table
      */
     public ArrayList<String> getColumnAt(int column) {
-        ArrayList<String> columnElements = new ArrayList<>(rowCount);
-        for (int row = 0; row < rowCount; row++) {
-            columnElements.add(table.get(row).get(column));
+        ArrayList<String> columnElements = new ArrayList<>(this.rowCount);
+        for (int row = 0; row < this.rowCount; row++) {
+            columnElements.add(this.table.get(row).get(column));
         }
         return columnElements;
     }
@@ -284,7 +284,7 @@ public class FinalTable {
      * @return The ID of the column from the final table, -1 if heading was not found
      * @since Release (1st July 2018)
      */
-    public int getColumnID(String heading) {
+    public int getColumnIDby(String heading) {
         int columnID = -1;
         for (int column = 0; column < this.columnCount; column++) {
             if(this.headings.get(column).equals(heading)) {columnID = column; break;}
@@ -301,13 +301,15 @@ public class FinalTable {
      * @return All elements within a sepcified area from the final table
      */
     public ArrayList<ArrayList<String>> getArea(int fromX, int fromY, int toX, int toY) {
-        ArrayList<ArrayList<String>> areaElements = new ArrayList<>(0);
-        for (int row = fromX; row <= toX; row++) {
-            areaElements.add(new ArrayList<>(0));
-            for (int column = fromY; column <= toY; column++) {
-                areaElements.get(areaElements.size()-1).add(this.table.get(row).get(column));
+        if(fromX <= toX && fromY <= toY) {
+            ArrayList<ArrayList<String>> areaElements = new ArrayList<>((toX - fromX) + 1);
+            for (int row = fromX; row <= toX; row++) {
+                areaElements.add(new ArrayList<>((toY - fromY) + 1));
+                for (int column = fromY; column <= toY; column++) {
+                    areaElements.get(areaElements.size()-1).add(this.table.get(row).get(column));
+                }
             }
-        }
-        return areaElements;
+            return areaElements;
+        } else {return null;}
     }
 }

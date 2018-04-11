@@ -7,6 +7,7 @@ package allocator;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.ListIterator;
 
 /**
@@ -318,6 +319,7 @@ public class FinalTable {
      * Add a column at the end of the final table.
      * @since Release (1st July 2018)
      */
+    //confirmation pending
     public void addColumn() {
         for (int row = 0; row < this.rowCount; row++) {
             this.table.get(row).add("");
@@ -333,6 +335,7 @@ public class FinalTable {
      * @param heading
      * @since Release (1st July 2018)
      */
+    //confirmation pending
     public void addColumn(String heading) {
         for (int row = 0; row < this.rowCount; row++) {
             this.table.get(row + 1).add("");
@@ -345,10 +348,34 @@ public class FinalTable {
     }
     /**
      * <b>Column Operation</b> <p>
+     * Add a column with heading and payload at the end of the final table.
+     * @param heading represented by a String
+     * @param payload represented by a one-dimensional String ArrayList
+     * @since Release (1st July 2018)
+     */
+    //confirmation pending
+    public void addColumn(String heading, ArrayList<String> payload) {
+        Iterator<String> payloadIterator = payload.iterator();
+        String payloadElement;
+        for (int row = 0; row < this.rowCount; row++) {
+            if(payloadIterator.hasNext() == true) {
+                payloadElement = payloadIterator.next();
+                this.table.get(row + 1).add(payloadElement);
+                this.payload.get(row).add(payloadElement);
+            }
+        }
+        this.table.get(0).add(heading);
+        this.headings.add(heading);
+        this.setColumnCount();
+        
+    }
+    /**
+     * <b>Column Operation</b> <p>
      * Add a column at a specified column ID in the final table.
      * @param columnID represented by a Integer
      * @since Release (1st July 2018)
      */
+    //confirmation pending
     public void addColumn(int columnID) {
         for (int row = 0; row < this.rowCount; row++) {
             this.table.get(row + 1).add("");
@@ -365,6 +392,7 @@ public class FinalTable {
      * @param heading represented by a String
      * @since Release (1st July 2018)
      */
+    //confirmation pending
     public void addColumn(int columnID, String heading) {
         for (int row = 0; row < this.rowCount; row++) {
             this.table.get(row).add(columnID, heading);
@@ -381,6 +409,7 @@ public class FinalTable {
      * @param payload represented by a one-dimensional String ArrayList
      * @since Release (1st July 2018)
      */
+    //confirmation pending
     public void addColumn(int columnID, String heading, ArrayList<String> payload) {
         this.payload.add(columnID, payload);
         this.headings.add(columnID, heading);

@@ -351,7 +351,7 @@ public class FXMLController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("initialize");
+        System.out.println("initialize done :-)");
     }
     
 }

@@ -312,4 +312,121 @@ public class FinalTable {
             return areaElements;
         } else {return null;}
     }
+    
+    /**
+     * <b>Column Operation</b> <p>
+     * Add a column at the end of the final table.
+     * @since Release (1st July 2018)
+     */
+    public void addColumn() {
+        for (int row = 0; row < this.rowCount; row++) {
+            this.table.get(row).add("");
+            if(row != 0) {this.payload.get(row - 1).add("");}
+        }
+        this.headings.add("");
+        this.setColumnCount();
+        
+    }
+    /**
+     * <b>Column Operation</b> <p>
+     * Add a column with heading at the end of the final table.
+     * @param heading
+     * @since Release (1st July 2018)
+     */
+    public void addColumn(String heading) {
+        for (int row = 0; row < this.rowCount; row++) {
+            this.table.get(row + 1).add("");
+            this.payload.get(row).add("");
+        }
+        this.table.get(0).add(heading);
+        this.headings.add(heading);
+        this.setColumnCount();
+        
+    }
+    /**
+     * <b>Column Operation</b> <p>
+     * Add a column at a specified column ID in the final table.
+     * @param columnID represented by a Integer
+     * @since Release (1st July 2018)
+     */
+    public void addColumn(int columnID) {
+        for (int row = 0; row < this.rowCount; row++) {
+            this.table.get(row + 1).add("");
+            this.payload.get(row).add("");
+        }
+        this.table.get(0).add("");
+        this.headings.add(columnID, "");
+        this.setColumnCount();
+    }
+    /**
+     * <b>Column Operation</b> <p>
+     * Add a column with heading at a specified column ID in the final table.
+     * @param columnID represented by a Integer
+     * @param heading represented by a String
+     * @since Release (1st July 2018)
+     */
+    public void addColumn(int columnID, String heading) {
+        for (int row = 0; row < this.rowCount; row++) {
+            this.table.get(row).add(columnID, heading);
+            this.headings.add(columnID, heading);
+            if(row != 0) {this.payload.get(row - 1).add(columnID, heading);}
+        }
+        this.setColumnCount();
+    }
+    /**
+     * <b>Column Operation</b> <p>
+     * Add a column with heading and payload at a specified column ID in the final table.
+     * @param columnID represented by a Integer
+     * @param heading represented by a String
+     * @param payload represented by a one-dimensional String ArrayList
+     * @since Release (1st July 2018)
+     */
+    public void addColumn(int columnID, String heading, ArrayList<String> payload) {
+        this.payload.add(columnID, payload);
+        this.headings.add(columnID, heading);
+        payload.add(0, heading);
+        this.table.add(columnID, payload);
+        this.setColumnCount();
+    }
+    /**
+     * <b>Row Operation</b> <p>
+     * Add a row at the end of the final table.
+     * @since Release (1st July 2018)
+     */
+    public void addRow() {
+        this.table.ad
+    }
+    /**
+     * <b>Row Operation</b> <p>
+     * Add a column with heading at a specified column ID.
+     * @param rowID represented by a Integer
+     * @since Release (1st July 2018)
+     */
+    public void addRow(int rowID) {
+        
+    }
+    /**
+     * <b>Row Operation</b> <p>
+     * Add a column with heading at a specified column ID.
+     * @param rowID represented by a Integer
+     * @param payload
+     * @since Release (1st July 2018)
+     */
+    public void addRow(int rowID, ArrayList<String> payload) {
+        
+    }
+    /**
+     * <b>Row Operation</b> <p>
+     * Add a column with heading and payload at a specified column ID in the final table.
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @since Release (1st July 2018)
+     */
+    public void addArea(int fromX, int fromY, int toX, int toY) {
+        
+    }
+
+    
 }

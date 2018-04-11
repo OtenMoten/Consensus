@@ -42,7 +42,7 @@ public class FXMLController implements Initializable {
         //testUserDataTable();
         //testMetaDataTable();
         //testLayout();
-        //testFinalTable();
+        testFinalTable();
     }
     
     private void testUserDataTable() {

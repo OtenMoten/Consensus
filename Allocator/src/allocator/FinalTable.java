@@ -174,7 +174,7 @@ public class FinalTable {
     /**
      * <b>Setter</b> <p>
      * Only a existing area can be set up.  <p>
-     * The XY-space need as same size as areaContent. 
+     * The XY-space need as same size as areaContent is. 
      * @param areaContent represented by a two-dimensional String ArrayList
      * @param fromX Representing a start row
      * @param fromY Representing a start column
@@ -378,10 +378,10 @@ public class FinalTable {
     //confirmation pending
     public void addColumn(int columnID) {
         for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row + 1).add("");
-            this.payload.get(row).add("");
+            this.table.get(row + 1).add(columnID, "");
+            this.payload.get(row).add(columnID, "");
         }
-        this.table.get(0).add("");
+        this.table.get(0).add(columnID, "");
         this.headings.add(columnID, "");
         this.setColumnCount();
     }
@@ -395,10 +395,11 @@ public class FinalTable {
     //confirmation pending
     public void addColumn(int columnID, String heading) {
         for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row).add(columnID, heading);
-            this.headings.add(columnID, heading);
-            if(row != 0) {this.payload.get(row - 1).add(columnID, heading);}
+            this.table.get(row + 1).add(columnID, "");
+            this.payload.get(row).add(columnID, "");
         }
+        this.table.get(0).add(columnID, heading);
+        this.headings.add(columnID, heading);
         this.setColumnCount();
     }
     /**
@@ -411,10 +412,17 @@ public class FinalTable {
      */
     //confirmation pending
     public void addColumn(int columnID, String heading, ArrayList<String> payload) {
-        this.payload.add(columnID, payload);
+        Iterator<String> payloadIterator = payload.iterator();
+        String payloadElement;
+        for (int row = 0; row < this.rowCount; row++) {
+            if(payloadIterator.hasNext() == true) {
+                payloadElement = payloadIterator.next();
+                this.table.get(row + 1).add(columnID, payloadElement);
+                this.payload.get(row).add(columnID, payloadElement);
+            }
+        }
+        this.table.get(0).add(columnID, heading);
         this.headings.add(columnID, heading);
-        payload.add(0, heading);
-        this.table.add(columnID, payload);
         this.setColumnCount();
     }
     /**
@@ -422,40 +430,52 @@ public class FinalTable {
      * Add a row at the end of the final table.
      * @since Release (1st July 2018)
      */
+    //confirmation pending
     public void addRow() {
-        this.table.ad
+        this.table.add(new ArrayList<>(this.columnCount));
+        this.payload.add(new ArrayList<>(this.columnCount));
+        this.setRowCount();
     }
     /**
      * <b>Row Operation</b> <p>
-     * Add a column with heading at a specified column ID.
+     * Add a row with payload at a the end of the final table.
+     * @param payload
+     * @since Release (1st July 2018)
+     */
+    //confirmation pending
+    public void addRow(ArrayList<String> payload) {
+        this.table.add(payload);
+        this.payload.add(payload);
+        this.setRowCount();
+    }
+    /**
+     * <b>Row Operation</b> <p>
+     * Add a row at a specified row ID.
      * @param rowID represented by a Integer
      * @since Release (1st July 2018)
      */
+    //confirmation pending
     public void addRow(int rowID) {
-        
+        if(rowID > 0) {
+            this.table.add(rowID, new ArrayList<>(this.columnCount));
+            this.payload.add(rowID, new ArrayList<>(this.columnCount));
+            this.setRowCount();
+        } else {System.err.println("rowID = 0 -> use setHeadings() to alter the headings");}
     }
     /**
      * <b>Row Operation</b> <p>
-     * Add a column with heading at a specified column ID.
+     * Add a row with payload at a specified row ID.
      * @param rowID represented by a Integer
      * @param payload
      * @since Release (1st July 2018)
      */
+    //confirmation pending
     public void addRow(int rowID, ArrayList<String> payload) {
-        
+        if(rowID > 0) {
+            this.table.add(rowID, payload);
+            this.payload.add(rowID, payload);
+            this.setRowCount();
+        } else {System.err.println("rowID = 0 -> use setHeadings() to alter the headings");}    
     }
-    /**
-     * <b>Row Operation</b> <p>
-     * Add a column with heading and payload at a specified column ID in the final table.
-     * @param fromX
-     * @param fromY
-     * @param toX
-     * @param toY
-     * @since Release (1st July 2018)
-     */
-    public void addArea(int fromX, int fromY, int toX, int toY) {
-        
-    }
-
     
 }

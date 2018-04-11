@@ -351,6 +351,24 @@ public class FXMLController implements Initializable {
         this.finalTable.addRow();
         this.finalTable.addRow();
         this.finalTable.addColumn();
+        this.finalTable.addColumn();
+        
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column));
+            } System.out.println();
+        }
+        
+        for (int row = 0; row < this.finalTable.getPayload().size(); row++) {
+            for (int column = 0; column < this.finalTable.getPayload().get(0).size(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column));
+            } System.out.println();
+        }
+        
+        for (int column = 0; column < this.finalTable.getHeadings().size(); column++) {
+            System.out.println(this.finalTable.getHeadings().get(column));
+        }
+        
         
         //System.out.println("addColumn()");
         /*this.finalTable.addColumn(heading);

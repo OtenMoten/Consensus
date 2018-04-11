@@ -321,9 +321,9 @@ public class FinalTable {
      */
     public void addColumn() {
         for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row).add("");
-            if(row == 0) {this.headings.add("");}
-            if(row != 0) {this.payload.get(row - 1).add("");}
+            this.table.get(row).add("addColumn()");
+            if(row == 0) {this.headings.add("addColumn()");}
+            if(row != 0) {this.payload.get(row - 1).add("addColumn()");}
         } this.setColumnCount();
     }
     /**

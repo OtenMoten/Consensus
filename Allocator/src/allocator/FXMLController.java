@@ -347,6 +347,39 @@ public class FXMLController implements Initializable {
         
         System.out.println("getRowAt");
         System.out.println(this.finalTable.getRowAt(2));
+        
+        System.out.println("****************** CHECK OPERATIONS ******************");
+        
+        System.out.println("Setting a final table");
+        this.finalTable.setTable(this.fileReader.readInUserDataTableHSSF());
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+        
+        System.out.println("addColumn()");
+        System.out.println("Number of columns before: " + this.finalTable.getColumnCount());
+        this.finalTable.addColumn();
+        System.out.println("Number of columns after: " + this.finalTable.getColumnCount());
+        
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        } System.out.println();
+
+        System.out.println("addColumn()");
+        /*this.finalTable.addColumn(heading);
+        
+        this.finalTable.addColumn(0);
+        
+        this.finalTable.addColumn(heading, payload);
+        
+        this.finalTable.addColumn(0, heading);
+        
+        this.finalTable.addColumn(0, heading, payload); */
+        
     }
     
     @Override

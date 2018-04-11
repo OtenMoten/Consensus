@@ -97,7 +97,7 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public void setColumnCount() {
-       this.columnCount = this.table.get(0).size();
+        this.columnCount = this.table.get(0).size();
     }
     /**
      * <b>Setter</b> <p>
@@ -322,12 +322,9 @@ public class FinalTable {
     //confirmation pending
     public void addColumn() {
         for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row).add("");
-            if(row != 0) {this.payload.get(row - 1).add("");}
+            this.table.get(row).add("XYZ");
         }
-        this.headings.add("");
         this.setColumnCount();
-        
     }
     /**
      * <b>Column Operation</b> <p>
@@ -477,5 +474,9 @@ public class FinalTable {
             this.setRowCount();
         } else {System.err.println("rowID = 0 -> use setHeadings() to alter the headings");}    
     }
+    
+    public void remove(int rowID) {
+        this.table.remove(rowID);
+    } 
     
 }

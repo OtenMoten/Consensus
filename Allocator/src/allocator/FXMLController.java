@@ -348,7 +348,7 @@ public class FXMLController implements Initializable {
         
         this.finalTable = new FinalTable();
         
-        this.finalTable.addRow();
+        /*this.finalTable.addRow();
         this.finalTable.addRow();
         this.finalTable.addColumn();
         this.finalTable.addColumn();
@@ -367,12 +367,11 @@ public class FXMLController implements Initializable {
         
         for (int column = 0; column < this.finalTable.getHeadings().size(); column++) {
             System.out.println(this.finalTable.getHeadings().get(column));
-        }
+        } */
         
-        
-        //System.out.println("addColumn()");
-        /*this.finalTable.addColumn(heading);
-        
+        this.finalTable.addColumn(heading);
+
+        /*
         this.finalTable.addColumn(0);
         
         this.finalTable.addColumn(heading, payload);

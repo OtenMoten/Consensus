@@ -171,7 +171,7 @@ public class FXMLController implements Initializable {
     private void testFinalTable() {
         System.out.println("FinalTable Class Test");
         
-        /*System.out.println("Setting a final table");
+        /* System.out.println("Setting a final table");
         this.finalTable.setTable(this.userDataTable.getTable());
         for (int row = 0; row < this.finalTable.getRowCount(); row++) {
             for (int column = 0; column < this.finalTable.getColumnCount(); column++) {

@@ -63,11 +63,11 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public FinalTable() {
-        this.table = new ArrayList<>(0);
-        this.rowCount = 0;
-        this.columnCount = 0;
-        this.headings = new ArrayList<>(1);
-        this.payload = new ArrayList<>(0);    
+        (this.table = new ArrayList<>()).add(new ArrayList<>()); //initialize one row with one column
+        this.rowCount = this.table.size();
+        this.columnCount = this.table.get(0).size();
+        this.headings = new ArrayList<>(this.columnCount);
+        this.payload = null;
     }
     
     /**
@@ -319,12 +319,12 @@ public class FinalTable {
      * Add a column at the end of the final table.
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void addColumn() {
         for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row).add("XYZ");
-        }
-        this.setColumnCount();
+            this.table.get(row).add("");
+            if(row == 0) {this.headings.add("");}
+            if(row != 0) {this.payload.get(row - 1).add("");}
+        } this.setColumnCount();
     }
     /**
      * <b>Column Operation</b> <p>
@@ -427,10 +427,10 @@ public class FinalTable {
      * Add a row at the end of the final table.
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void addRow() {
         this.table.add(new ArrayList<>(this.columnCount));
-        this.payload.add(new ArrayList<>(this.columnCount));
+        if(this.rowCount == 1) {(this.payload = new ArrayList<>(1)).add(new ArrayList<>(1));} //The first execution of addRow() initialize the payload table.
+        if(this.rowCount != 1) {this.payload.add(new ArrayList<>(this.columnCount));} //Offset is "1" because of the missing headings line.
         this.setRowCount();
     }
     /**

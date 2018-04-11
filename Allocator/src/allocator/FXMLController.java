@@ -18,11 +18,11 @@ import javafx.fxml.Initializable;
  */
 public class FXMLController implements Initializable {
     
-    UserDataTable userDataTable;
-    MetaDataTable metaDataTable;
-    FinalTable finalTable;
-    Layout layout;
-    FileReader fileReader;
+    private UserDataTable userDataTable;
+    private MetaDataTable metaDataTable;
+    private FinalTable finalTable;
+    private Layout layout;
+    private FileReader fileReader;
     
     /**
      * <b>Constructor</b> <p>
@@ -32,17 +32,11 @@ public class FXMLController implements Initializable {
     @FXML
     public void readInAll() {
         
-        this.fileReader = new FileReader("userDataTable.xls", "metadata.xml", "layout.csv");
         
-        this.userDataTable = new UserDataTable(this.fileReader.readInUserDataTableHSSF());
-        this.metaDataTable = new MetaDataTable(this.fileReader.readInMetaDataTable());
-        this.finalTable = new FinalTable();
-        this.layout = new Layout(this.fileReader.readInLayout(";"));
         
-        //testUserDataTable();
-        //testMetaDataTable();
-        //testLayout();
+        
         testFinalTable();
+        
     }
     
     private void testUserDataTable() {
@@ -177,7 +171,7 @@ public class FXMLController implements Initializable {
     private void testFinalTable() {
         System.out.println("FinalTable Class Test");
         
-        System.out.println("Setting a final table");
+        /*System.out.println("Setting a final table");
         this.finalTable.setTable(this.userDataTable.getTable());
         for (int row = 0; row < this.finalTable.getRowCount(); row++) {
             for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
@@ -346,30 +340,19 @@ public class FXMLController implements Initializable {
         System.out.println(this.finalTable.getPayload());
         
         System.out.println("getRowAt");
-        System.out.println(this.finalTable.getRowAt(2));
+        System.out.println(this.finalTable.getRowAt(2));*/
         
         System.out.println("****************** CHECK OPERATIONS ******************");
         
         System.out.println("Setting a final table");
-        this.finalTable.setTable(this.fileReader.readInUserDataTableHSSF());
-        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
-            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
-                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
-            } System.out.println();
-        } System.out.println();
         
-        System.out.println("addColumn()");
-        System.out.println("Number of columns before: " + this.finalTable.getColumnCount());
+        this.finalTable = new FinalTable();
+        
+        this.finalTable.addRow();
+        this.finalTable.addRow();
         this.finalTable.addColumn();
-        System.out.println("Number of columns after: " + this.finalTable.getColumnCount());
         
-        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
-            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
-                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
-            } System.out.println();
-        } System.out.println();
-
-        System.out.println("addColumn()");
+        //System.out.println("addColumn()");
         /*this.finalTable.addColumn(heading);
         
         this.finalTable.addColumn(0);
@@ -385,6 +368,11 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("initialize done :-)");
+        this.fileReader = new FileReader("userDataTable.xls", "metadata.xml", "layout.csv");
+        this.userDataTable = new UserDataTable(this.fileReader.readInUserDataTableHSSF());
+        this.metaDataTable = new MetaDataTable(this.fileReader.readInMetaDataTable());
+        this.finalTable = new FinalTable();
+        this.layout = new Layout(this.fileReader.readInLayout(";"));
     }
     
 }

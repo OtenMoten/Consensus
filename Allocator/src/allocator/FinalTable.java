@@ -428,8 +428,7 @@ public class FinalTable {
      */
     public void addRow(ArrayList<String> payload) {
         this.table.add(payload);
-        if(this.rowCount != 0) {this.payload.add(payload);}
-        if(this.rowCount == 0) {this.headings.addAll(payload);}
+        this.payload.add(payload);
         this.setRowCount();
     }
     /**

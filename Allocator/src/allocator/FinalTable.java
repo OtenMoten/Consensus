@@ -67,7 +67,7 @@ public class FinalTable {
         this.rowCount = this.table.size();
         this.columnCount = this.table.get(0).size();
         this.headings = new ArrayList<>(this.columnCount);
-        this.payload = null;
+        this.payload = new ArrayList<>();
     }
     
     /**
@@ -321,9 +321,9 @@ public class FinalTable {
      */
     public void addColumn() {
         for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row).add("_");
-            if(row == 0) {this.headings.add("_");}
-            if(row != 0) {this.payload.get(row - 1).add("_");}
+            this.table.get(row).add("");
+            if(row == 0) {this.headings.add("");}
+            if(row != 0) {this.payload.get(row - 1).add("");}
         } this.setColumnCount();
     }
     /**
@@ -336,8 +336,8 @@ public class FinalTable {
         this.table.get(0).add(heading);
         this.headings.add(heading);
         for (int row = 1; row < this.rowCount; row++) {
-            this.table.get(row).add("_");
-            this.payload.get(row - 1).add("_");
+            this.table.get(row).add("");
+            this.payload.get(row - 1).add("");
         }
         this.setColumnCount();  
     }
@@ -368,10 +368,10 @@ public class FinalTable {
      */
     public void addColumn(int columnID) {
         for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row).add(columnID, "_");
-            if(row != 0) {this.payload.get(row - 1).add(columnID, "_");}
+            this.table.get(row).add(columnID, "");
+            if(row != 0) {this.payload.get(row - 1).add(columnID, "");}
         }
-        this.headings.add(columnID, "_");
+        this.headings.add(columnID, "");
         this.setColumnCount();
     }
     /**
@@ -384,8 +384,8 @@ public class FinalTable {
     public void addColumn(int columnID, String heading) {
         this.headings.add(columnID, heading); this.table.get(0).add(columnID, heading);
         for (int row = 1; row < this.rowCount; row++) {
-            this.table.get(row).add(columnID, "_");
-            this.payload.get(row - 1).add(columnID, "_");
+            this.table.get(row).add(columnID, "");
+            this.payload.get(row - 1).add(columnID, "");
         }
         this.setColumnCount();
     }
@@ -417,8 +417,7 @@ public class FinalTable {
      */
     public void addRow() {
         this.table.add(new ArrayList<>(this.columnCount));
-        if(this.rowCount == 1) {(this.payload = new ArrayList<>(1)).add(new ArrayList<>(1));} //The first execution of addRow() initialize the payload table.
-        if(this.rowCount != 1) {this.payload.add(new ArrayList<>(this.columnCount));} //Offset is "1" because of the missing headings line.
+        this.payload.add(new ArrayList<>(this.columnCount));
         this.setRowCount();
     }
     /**
@@ -427,10 +426,10 @@ public class FinalTable {
      * @param payload
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void addRow(ArrayList<String> payload) {
         this.table.add(payload);
-        this.payload.add(payload);
+        if(this.rowCount != 0) {this.payload.add(payload);}
+        if(this.rowCount == 0) {this.headings.addAll(payload);}
         this.setRowCount();
     }
     /**
@@ -439,13 +438,17 @@ public class FinalTable {
      * @param rowID represented by a Integer
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void addRow(int rowID) {
+        ArrayList<String> arrayList = new ArrayList<>(this.columnCount);
+        for (int column = 0; column < this.columnCount; column++) {arrayList.add("");}
         if(rowID > 0) {
-            this.table.add(rowID, new ArrayList<>(this.columnCount));
-            this.payload.add(rowID, new ArrayList<>(this.columnCount));
+            this.table.add(rowID, arrayList);
+            this.payload.add(rowID - 1, arrayList);
             this.setRowCount();
-        } else {System.err.println("rowID = 0 -> use setHeadings() to alter the headings");}
+        } else {
+            System.err.println("rowID = 0 -> use setHeadings() to alter the headings");
+            System.out.println("rowID = 0 -> use setHeadings() to alter the headings");
+        }
     }
     /**
      * <b>Row Operation</b> <p>
@@ -454,17 +457,27 @@ public class FinalTable {
      * @param payload
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void addRow(int rowID, ArrayList<String> payload) {
         if(rowID > 0) {
             this.table.add(rowID, payload);
-            this.payload.add(rowID, payload);
+            this.payload.add(rowID - 1, payload);
             this.setRowCount();
-        } else {System.err.println("rowID = 0 -> use setHeadings() to alter the headings");}    
+        } else {
+            System.err.println("rowID = 0 -> use setHeadings() to alter the headings");
+            System.out.println("rowID = 0 -> use setHeadings() to alter the headings");
+        }
     }
-    
-    public void remove(int rowID) {
+    /**
+     * <b>Row Operation</b> <p>
+     * Delete a specified row.
+     * @param rowID represented by a Integer
+     * @since Release (1st July 2018)
+     */
+    public void removeRow (int rowID) {
         this.table.remove(rowID);
+        if(rowID == 0) {this.headings = new ArrayList<>(this.columnCount);}
+        if(rowID != 0) {this.payload.remove(rowID);}
+        this.setRowCount();
     } 
     
 }

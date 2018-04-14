@@ -348,7 +348,7 @@ public class FXMLController implements Initializable {
         
         this.finalTable = new FinalTable();
         
-        /*this.finalTable.addRow();
+        this.finalTable.addRow();
         this.finalTable.addRow();
         this.finalTable.addColumn();
         this.finalTable.addColumn();
@@ -358,7 +358,9 @@ public class FXMLController implements Initializable {
                 System.out.print(this.finalTable.getTable().get(row).get(column));
             } System.out.println();
         }
+        System.out.println("Rows: " + this.finalTable.getRowCount() + " " + "Columns: " + this.finalTable.getColumnCount());
         
+        /*
         for (int row = 0; row < this.finalTable.getPayload().size(); row++) {
             for (int column = 0; column < this.finalTable.getPayload().get(0).size(); column++) {
                 System.out.print(this.finalTable.getPayload().get(row).get(column));
@@ -369,17 +371,147 @@ public class FXMLController implements Initializable {
             System.out.println(this.finalTable.getHeadings().get(column));
         } */
         
-        this.finalTable.addColumn(heading);
-
-        /*
+        System.out.println("addColum(String heading)");
+        this.finalTable.addColumn("_");
+        
+        System.out.println("");
+        System.out.println("Test whole table");
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        
+        System.out.println("");
+        System.out.println("Test payload");
+        for (int row = 0; row < this.finalTable.getPayload().size(); row++) {
+            for (int column = 0; column < this.finalTable.getPayload().get(0).size(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        
+        System.out.println("");
+        System.out.println("Test headings");
+        for (int column = 0; column < this.finalTable.getHeadings().size(); column++) {
+            System.out.println(this.finalTable.getHeadings().get(column) + " ");}
+        
+        System.out.println("");
+        System.out.println("Rows: " + this.finalTable.getRowCount() + " " + "Columns: " + this.finalTable.getColumnCount());
+        System.out.println(""); 
+        
+        System.out.println("addColum(int columnID)"); System.out.println();
         this.finalTable.addColumn(0);
+        this.finalTable.addColumn(2);
+        this.finalTable.addColumn(5);
         
-        this.finalTable.addColumn(heading, payload);
+        System.out.println("");
+        System.out.println("Test whole table");
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        System.out.println("");
+        System.out.println("Test payload");
+        for (int row = 0; row < this.finalTable.getPayload().size(); row++) {
+            for (int column = 0; column < this.finalTable.getPayload().get(0).size(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        System.out.println("");
+        System.out.println("Test headings");
+        for (int column = 0; column < this.finalTable.getHeadings().size(); column++) {
+            System.out.println(this.finalTable.getHeadings().get(column) + " ");}
         
-        this.finalTable.addColumn(0, heading);
+        System.out.println("");
+        System.out.println("Rows: " + this.finalTable.getRowCount() + " " + "Columns: " + this.finalTable.getColumnCount());
+        System.out.println("");
         
-        this.finalTable.addColumn(0, heading, payload); */
+        System.out.println("addColum(heading, payload)"); System.out.println();
+        ArrayList<String> arraylist = new ArrayList<>();
+        arraylist.add("_");arraylist.add("_");
+        this.finalTable.addColumn("_", arraylist);
         
+        System.out.println("");
+        System.out.println("Test whole table");
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        System.out.println("");
+        System.out.println("Test payload");
+        for (int row = 0; row < this.finalTable.getPayload().size(); row++) {
+            for (int column = 0; column < this.finalTable.getPayload().get(0).size(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        System.out.println("");
+        System.out.println("Test headings");
+        for (int column = 0; column < this.finalTable.getHeadings().size(); column++) {
+            System.out.println(this.finalTable.getHeadings().get(column) + " ");}
+        
+        System.out.println("");
+        System.out.println("Rows: " + this.finalTable.getRowCount() + " " + "Columns: " + this.finalTable.getColumnCount());
+        System.out.println("");
+        
+        System.out.println("addColumn(int columnID, String heading)"); System.out.println();
+        this.finalTable.addColumn(0, "_");
+        this.finalTable.addColumn(1, "_");
+        this.finalTable.addColumn(9, "_");
+        
+        System.out.println("");
+        System.out.println("Test whole table");
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        System.out.println("");
+        System.out.println("Test payload");
+        for (int row = 0; row < this.finalTable.getPayload().size(); row++) {
+            for (int column = 0; column < this.finalTable.getPayload().get(0).size(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        System.out.println("");
+        System.out.println("Test headings");
+        for (int column = 0; column < this.finalTable.getHeadings().size(); column++) {
+            System.out.println(this.finalTable.getHeadings().get(column) + " ");}
+        
+        System.out.println("");
+        System.out.println("Rows: " + this.finalTable.getRowCount() + " " + "Columns: " + this.finalTable.getColumnCount());
+        System.out.println("");
+        
+        System.out.println("addColumn(int columnID, String heading, ArrayList<String> payload)"); System.out.println();
+        ArrayList<String> arraylist2 = new ArrayList<>();
+        arraylist2.add("1");arraylist2.add("2");
+        this.finalTable.addColumn(0, "Heading", arraylist2);
+        this.finalTable.addColumn(1, "Heading", arraylist2);
+        this.finalTable.addColumn(12, "Heading", arraylist2);
+        
+        System.out.println("");
+        System.out.println("Test whole table");
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        System.out.println("");
+        System.out.println("Test payload");
+        for (int row = 0; row < this.finalTable.getPayload().size(); row++) {
+            for (int column = 0; column < this.finalTable.getPayload().get(0).size(); column++) {
+                System.out.print(this.finalTable.getPayload().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        System.out.println("");
+        System.out.println("Test headings");
+        for (int column = 0; column < this.finalTable.getHeadings().size(); column++) {
+            System.out.println(this.finalTable.getHeadings().get(column) + " ");}
+        
+        System.out.println("");
+        System.out.println("Rows: " + this.finalTable.getRowCount() + " " + "Columns: " + this.finalTable.getColumnCount());
+        System.out.println("");
     }
     
     @Override

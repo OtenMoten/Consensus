@@ -321,9 +321,9 @@ public class FinalTable {
      */
     public void addColumn() {
         for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row).add("addColumn()");
-            if(row == 0) {this.headings.add("addColumn()");}
-            if(row != 0) {this.payload.get(row - 1).add("addColumn()");}
+            this.table.get(row).add("_");
+            if(row == 0) {this.headings.add("_");}
+            if(row != 0) {this.payload.get(row - 1).add("_");}
         } this.setColumnCount();
     }
     /**
@@ -332,16 +332,14 @@ public class FinalTable {
      * @param heading
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void addColumn(String heading) {
-        for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row + 1).add("");
-            this.payload.get(row).add("");
-        }
         this.table.get(0).add(heading);
         this.headings.add(heading);
-        this.setColumnCount();
-        
+        for (int row = 1; row < this.rowCount; row++) {
+            this.table.get(row).add("_");
+            this.payload.get(row - 1).add("_");
+        }
+        this.setColumnCount();  
     }
     /**
      * <b>Column Operation</b> <p>
@@ -350,21 +348,17 @@ public class FinalTable {
      * @param payload represented by a one-dimensional String ArrayList
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void addColumn(String heading, ArrayList<String> payload) {
         Iterator<String> payloadIterator = payload.iterator();
         String payloadElement;
-        for (int row = 0; row < this.rowCount; row++) {
+        this.table.get(0).add(heading); this.headings.add(heading);
+        for (int row = 1; row < this.rowCount; row++) {
             if(payloadIterator.hasNext() == true) {
                 payloadElement = payloadIterator.next();
-                this.table.get(row + 1).add(payloadElement);
-                this.payload.get(row).add(payloadElement);
+                this.table.get(row).add(payloadElement);
+                this.payload.get(row - 1).add(payloadElement);
             }
-        }
-        this.table.get(0).add(heading);
-        this.headings.add(heading);
-        this.setColumnCount();
-        
+        } this.setColumnCount();
     }
     /**
      * <b>Column Operation</b> <p>
@@ -372,14 +366,12 @@ public class FinalTable {
      * @param columnID represented by a Integer
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void addColumn(int columnID) {
         for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row + 1).add(columnID, "");
-            this.payload.get(row).add(columnID, "");
+            this.table.get(row).add(columnID, "_");
+            if(row != 0) {this.payload.get(row - 1).add(columnID, "_");}
         }
-        this.table.get(0).add(columnID, "");
-        this.headings.add(columnID, "");
+        this.headings.add(columnID, "_");
         this.setColumnCount();
     }
     /**
@@ -389,14 +381,12 @@ public class FinalTable {
      * @param heading represented by a String
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void addColumn(int columnID, String heading) {
-        for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row + 1).add(columnID, "");
-            this.payload.get(row).add(columnID, "");
+        this.headings.add(columnID, heading); this.table.get(0).add(columnID, heading);
+        for (int row = 1; row < this.rowCount; row++) {
+            this.table.get(row).add(columnID, "_");
+            this.payload.get(row - 1).add(columnID, "_");
         }
-        this.table.get(0).add(columnID, heading);
-        this.headings.add(columnID, heading);
         this.setColumnCount();
     }
     /**
@@ -407,20 +397,18 @@ public class FinalTable {
      * @param payload represented by a one-dimensional String ArrayList
      * @since Release (1st July 2018)
      */
-    //confirmation pending
     public void addColumn(int columnID, String heading, ArrayList<String> payload) {
         Iterator<String> payloadIterator = payload.iterator();
         String payloadElement;
-        for (int row = 0; row < this.rowCount; row++) {
-            if(payloadIterator.hasNext() == true) {
-                payloadElement = payloadIterator.next();
-                this.table.get(row + 1).add(columnID, payloadElement);
-                this.payload.get(row).add(columnID, payloadElement);
-            }
-        }
         this.table.get(0).add(columnID, heading);
         this.headings.add(columnID, heading);
-        this.setColumnCount();
+        for (int row = 1; row < this.rowCount; row++) {
+            if(payloadIterator.hasNext() == true) {
+                payloadElement = payloadIterator.next();
+                this.table.get(row).add(columnID, payloadElement);
+                this.payload.get(row - 1).add(columnID, payloadElement);
+            }
+        } this.setColumnCount();
     }
     /**
      * <b>Row Operation</b> <p>

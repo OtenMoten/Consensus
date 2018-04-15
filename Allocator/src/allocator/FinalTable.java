@@ -105,8 +105,11 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public void setHeadings(ArrayList<String> headings) {
-        this.table.set(0, headings);
+        this.table.add(0, headings);
+        this.table.remove(1);
         this.headings = headings;
+        this.columnCount = headings.size();
+        this.rowCount = this.table.size();
     }
     /**
      * <b>Setter</b> <p>
@@ -473,8 +476,19 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public void addRow(ArrayList<String> payload) {
-        this.table.add(payload);
-        this.payload.add(payload);
+        if(payload.size() == this.columnCount) {
+            this.table.add(payload);
+            this.payload.add(payload);
+        } else {
+            if(payload.size() > this.columnCount) {
+                System.err.println("The size of the parameter 'payload' is to big. Add a column in the final table or truncat the parameter 'payload'.");
+                System.out.println("The size of the parameter 'payload' is to big. Add a column in the final table or truncat the parameter 'payload'.");
+            } else {
+                System.err.println("The size of the parameter 'payload' is to short. Remove a column in the final table or fill up the parameter 'payload'.");
+                System.out.println("The size of the parameter 'payload' is to short. Remove a column in the final table or fill up the parameter 'payload'.");
+            }
+        }
+        
         this.setRowCount();
     }
     /**
@@ -504,13 +518,23 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public void addRow(int rowID, ArrayList<String> payload) {
-        if(rowID >= 1 && rowID <= Integer.MAX_VALUE) {
-            this.table.add(rowID, payload);
-            this.payload.add(rowID - 1, payload);
-            this.setRowCount();
+        if(payload.size() == this.columnCount) {
+            if(rowID >= 1 && rowID <= Integer.MAX_VALUE) {
+                this.table.add(rowID, payload);
+                this.payload.add(rowID - 1, payload);
+                this.setRowCount();
+            } else {
+                System.err.println("'rowID' shouldn't be '0' >> use 'setHeadings()' to alter the headings.");
+                System.out.println("'rowID' shouldn't be '0' >> use 'setHeadings()' to alter the headings.");
+            }
         } else {
-            System.err.println("'rowID' shouldn't be '0' >> use 'setHeadings()' to alter the headings.");
-            System.out.println("'rowID' shouldn't be '0' >> use 'setHeadings()' to alter the headings.");
+            if(payload.size() > this.columnCount) {
+                System.err.println("The size of the parameter 'payload' is to big. Add a column in the final table or truncat the parameter 'payload'.");
+                System.out.println("The size of the parameter 'payload' is to big. Add a column in the final table or truncat the parameter 'payload'.");
+            } else {
+                System.err.println("The size of the parameter 'payload' is to short. Remove a column in the final table or fill up the parameter 'payload'.");
+                System.out.println("The size of the parameter 'payload' is to short. Remove a column in the final table or fill up the parameter 'payload'.");
+            }
         }
     }
     /**

@@ -169,16 +169,20 @@ public class FXMLController implements Initializable {
     
     private void testFinalTable() {
         System.out.println("FinalTable Class Test");
+        
+        //this.finalTable.
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("initialize done :-)");
         this.fileReader = new FileReader("userDataTable.xls", "metadata.xml", "layout.csv");
         this.userDataTable = new UserDataTable(this.fileReader.readInUserDataTableHSSF());
         this.metaDataTable = new MetaDataTable(this.fileReader.readInMetaDataTable());
         this.finalTable = new FinalTable();
         this.layout = new Layout(this.fileReader.readInLayout(";"));
+        System.out.println("initialize done :-)");
+        
+        System.out.println(Integer.MIN_VALUE + " " + Integer.MAX_VALUE);
     }
     
 }

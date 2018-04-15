@@ -320,26 +320,30 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public void addColumn() {
-        for (int row = 0; row < this.rowCount; row++) {
+        this.table.get(0).add(""); this.headings.add("");
+        for (int row = 1; row < this.rowCount; row++) {
             this.table.get(row).add("");
-            if(row == 0) {this.headings.add("");}
-            if(row != 0) {this.payload.get(row - 1).add("");}
+            this.payload.get(row - 1).add("");
         } this.setColumnCount();
     }
     /**
      * <b>Column Operation</b> <p>
      * Add a column with heading at the end of the final table.
-     * @param heading
+     * @param heading represented by a String
      * @since Release (1st July 2018)
      */
     public void addColumn(String heading) {
-        this.table.get(0).add(heading);
-        this.headings.add(heading);
-        for (int row = 1; row < this.rowCount; row++) {
-            this.table.get(row).add("");
-            this.payload.get(row - 1).add("");
+        if(heading.matches("[a-zA-Z]+")) { // '+' is a 'reclutant' quantifier and '++' would be 'possesive' quantifier 
+            this.table.get(0).add(heading);
+            this.headings.add(heading); 
+                for (int row = 1; row < this.rowCount; row++) {
+                    this.table.get(row).add("");
+                    this.payload.get(row - 1).add("");
+                } this.setColumnCount();
+        } else {
+            System.err.println("'heading' must be NOT empty.");
+            System.out.println("'heading' must be NOT empty.");
         }
-        this.setColumnCount();  
     }
     /**
      * <b>Column Operation</b> <p>
@@ -351,48 +355,75 @@ public class FinalTable {
     public void addColumn(String heading, ArrayList<String> payload) {
         Iterator<String> payloadIterator = payload.iterator();
         String payloadElement;
-        this.table.get(0).add(heading); this.headings.add(heading);
-        for (int row = 1; row < this.rowCount; row++) {
-            if(payloadIterator.hasNext() == true) {
-                payloadElement = payloadIterator.next();
-                this.table.get(row).add(payloadElement);
-                this.payload.get(row - 1).add(payloadElement);
+        if(payload.size() == this.rowCount - 1) {
+            this.table.get(0).add(heading);
+            this.headings.add(heading);
+            for (int row = 1; row < this.rowCount; row++) {
+                if(payloadIterator.hasNext() == true) {
+                    payloadElement = payloadIterator.next();
+                    this.table.get(row).add(payloadElement);
+                    this.payload.get(row - 1).add(payloadElement);
+                }
+            } this.setColumnCount();
+        } else {
+            if(payload.size() > this.rowCount - 1) {
+                System.err.println("The size of the parameter 'payload' is to big. Add a row in the final table or truncat the parameter 'payload'.");
+                System.out.println("The size of the parameter 'payload' is to big. Add a row in the final table or truncat the parameter 'payload'.");
+            } else {
+                System.err.println("The size of the parameter 'payload' is to short. Remove a row in the final table or fill up the parameter 'payload'.");
+                System.out.println("The size of the parameter 'payload' is to short. Remove a row in the final table or fill up the parameter 'payload'.");
             }
-        } this.setColumnCount();
+        }
     }
     /**
      * <b>Column Operation</b> <p>
      * Add a column at a specified column ID in the final table.
-     * @param columnID represented by a Integer
+     * @param columnID represented by a Integer (0 .. Integer.MAX_VALUE)
      * @since Release (1st July 2018)
      */
     public void addColumn(int columnID) {
-        for (int row = 0; row < this.rowCount; row++) {
-            this.table.get(row).add(columnID, "");
-            if(row != 0) {this.payload.get(row - 1).add(columnID, "");}
+        if(columnID >= 0 && columnID <= Integer.MAX_VALUE) {
+            this.table.get(0).add(columnID, "");
+            this.headings.add(columnID, ""); 
+            for (int row = 1; row < this.rowCount; row++) {
+                this.table.get(row).add(columnID, "");
+                this.payload.get(row - 1).add(columnID, "");
+            } this.setColumnCount();
+        } else {
+            System.err.println("'columnID' must be greater or equal than '0'.");
+            System.out.println("'columnID' must be greater or equal than '0'.");
         }
-        this.headings.add(columnID, "");
-        this.setColumnCount();
     }
     /**
      * <b>Column Operation</b> <p>
      * Add a column with heading at a specified column ID in the final table.
-     * @param columnID represented by a Integer
+     * @param columnID represented by a Integer (0 .. Integer.MAX_VALUE)
      * @param heading represented by a String
      * @since Release (1st July 2018)
+     * @see https://docs.oracle.com/javase/tutorial/essential/regex/quant.html
      */
     public void addColumn(int columnID, String heading) {
-        this.headings.add(columnID, heading); this.table.get(0).add(columnID, heading);
-        for (int row = 1; row < this.rowCount; row++) {
-            this.table.get(row).add(columnID, "");
-            this.payload.get(row - 1).add(columnID, "");
+        if(heading.matches("[a-zA-Z]+")) { // '+' is a 'reclutant' quantifier and '++' would be 'possesive' quantifier 
+            if(columnID >= 0 && columnID <= Integer.MAX_VALUE) {
+                this.table.get(0).add(columnID, heading);
+                this.headings.add(columnID, heading); 
+                for (int row = 1; row < this.rowCount; row++) {
+                    this.table.get(row).add(columnID, "");
+                    this.payload.get(row - 1).add(columnID, "");
+                } this.setColumnCount();
+            } else {
+                System.err.println("'columnID' must be greater or equal than '0'.");
+                System.out.println("'columnID' must be greater or equal than '0'.");
+            }
+        } else {
+            System.err.println("'heading' must be NOT empty.");
+            System.out.println("'heading' must be NOT empty.");
         }
-        this.setColumnCount();
     }
     /**
      * <b>Column Operation</b> <p>
      * Add a column with heading and payload at a specified column ID in the final table.
-     * @param columnID represented by a Integer
+     * @param columnID represented by a Integer (0 .. Integer.MAX_VALUE)
      * @param heading represented by a String
      * @param payload represented by a one-dimensional String ArrayList
      * @since Release (1st July 2018)
@@ -400,15 +431,30 @@ public class FinalTable {
     public void addColumn(int columnID, String heading, ArrayList<String> payload) {
         Iterator<String> payloadIterator = payload.iterator();
         String payloadElement;
-        this.table.get(0).add(columnID, heading);
-        this.headings.add(columnID, heading);
-        for (int row = 1; row < this.rowCount; row++) {
-            if(payloadIterator.hasNext() == true) {
-                payloadElement = payloadIterator.next();
-                this.table.get(row).add(columnID, payloadElement);
-                this.payload.get(row - 1).add(columnID, payloadElement);
+        if(payload.size() == this.rowCount - 1) {
+            if(columnID >= 0 && columnID <= Integer.MAX_VALUE) {
+                this.table.get(0).add(columnID, heading);
+                this.headings.add(columnID, heading);
+                for (int row = 1; row < this.rowCount; row++) {
+                    if(payloadIterator.hasNext() == true) {
+                        payloadElement = payloadIterator.next();
+                        this.table.get(row).add(columnID, payloadElement);
+                        this.payload.get(row - 1).add(columnID, payloadElement);
+                    }
+                } this.setColumnCount();
+            } else {
+                System.err.println("'columnID' must be greater or equal than '0'.");
+                System.out.println("'columnID' must be greater or equal than '0'.");
             }
-        } this.setColumnCount();
+        } else {
+            if(payload.size() > this.rowCount - 1) {
+                System.err.println("The size of the parameter 'payload' is to big. Add a row in the final table or truncat the parameter 'payload'.");
+                System.out.println("The size of the parameter 'payload' is to big. Add a row in the final table or truncat the parameter 'payload'.");
+            } else {
+                System.err.println("The size of the parameter 'payload' is to short. Remove a row in the final table or fill up the parameter 'payload'.");
+                System.out.println("The size of the parameter 'payload' is to short. Remove a row in the final table or fill up the parameter 'payload'.");
+            }
+        }
     }
     /**
      * <b>Row Operation</b> <p>
@@ -423,7 +469,7 @@ public class FinalTable {
     /**
      * <b>Row Operation</b> <p>
      * Add a row with payload at a the end of the final table.
-     * @param payload
+     * @param payload represented by a one-dimensional String ArrayList
      * @since Release (1st July 2018)
      */
     public void addRow(ArrayList<String> payload) {
@@ -434,49 +480,52 @@ public class FinalTable {
     /**
      * <b>Row Operation</b> <p>
      * Add a row at a specified row ID.
-     * @param rowID represented by a Integer
+     * @param rowID represented by a Integer (1 .. Integer.MAX_VALUE)
      * @since Release (1st July 2018)
      */
     public void addRow(int rowID) {
-        ArrayList<String> arrayList = new ArrayList<>(this.columnCount);
-        for (int column = 0; column < this.columnCount; column++) {arrayList.add("");}
-        if(rowID > 0) {
-            this.table.add(rowID, arrayList);
-            this.payload.add(rowID - 1, arrayList);
+        ArrayList<String> newRow = new ArrayList<>(this.columnCount);
+        for (int column = 0; column < this.columnCount; column++) {newRow.add("");}
+        if(rowID >= 1 && rowID <= Integer.MAX_VALUE) {
+            this.table.add(rowID, newRow);
+            this.payload.add(rowID - 1, newRow);
             this.setRowCount();
         } else {
-            System.err.println("rowID = 0 -> use setHeadings() to alter the headings");
-            System.out.println("rowID = 0 -> use setHeadings() to alter the headings");
+            System.err.println("'rowID' shouldn't be '0' >> use 'setHeadings()' to alter the headings.");
+            System.out.println("'rowID' shouldn't be '0' >> use 'setHeadings()' to alter the headings.");
         }
     }
     /**
      * <b>Row Operation</b> <p>
-     * Add a row with payload at a specified row ID.
-     * @param rowID represented by a Integer
-     * @param payload
+     * Add a row with payload at a specified row ID. <p>
+     * Row 0 (headings line) couldn't be touched.
+     * @param rowID represented by a Integer (1 .. Integer.MAX_VALUE)
+     * @param payload represented by a one-dimensional String ArrayList
      * @since Release (1st July 2018)
      */
     public void addRow(int rowID, ArrayList<String> payload) {
-        if(rowID > 0) {
+        if(rowID >= 1 && rowID <= Integer.MAX_VALUE) {
             this.table.add(rowID, payload);
             this.payload.add(rowID - 1, payload);
             this.setRowCount();
         } else {
-            System.err.println("rowID = 0 -> use setHeadings() to alter the headings");
-            System.out.println("rowID = 0 -> use setHeadings() to alter the headings");
+            System.err.println("'rowID' shouldn't be '0' >> use 'setHeadings()' to alter the headings.");
+            System.out.println("'rowID' shouldn't be '0' >> use 'setHeadings()' to alter the headings.");
         }
     }
     /**
      * <b>Row Operation</b> <p>
      * Delete a specified row.
-     * @param rowID represented by a Integer
+     * @param rowID represented by a Integer (0 .. Integer.MAX_VALUE)
      * @since Release (1st July 2018)
      */
     public void removeRow (int rowID) {
-        this.table.remove(rowID);
-        if(rowID == 0) {this.headings = new ArrayList<>(this.columnCount);}
-        if(rowID != 0) {this.payload.remove(rowID);}
-        this.setRowCount();
+        if(rowID >= 0 && rowID <= Integer.MAX_VALUE) {
+            this.table.remove(rowID);
+            if(rowID == 0) {this.headings = new ArrayList<>(this.columnCount);}
+            if(rowID != 0) {this.payload.remove(rowID);}
+            this.setRowCount();
+        }
     } 
     
 }

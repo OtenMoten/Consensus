@@ -114,6 +114,37 @@ public class UserDataTable {
     }
     /**
      * <b>Getter</b> <p>
+     * @param heading represented by a String
+     * @since Release (1st July 2018)
+     * @return All elements from the userdata table at a sepcified heading
+     */
+    public ArrayList<String> getPayloadColumnAt(String heading) {
+        ArrayList<String> columnElements = new ArrayList<>();
+        int iSaveColumn = -1;
+        for (int row = 0; row < this.rowCount - 1; row++) {
+            for (int column = 0; column < this.columnCount; column++) {
+                if(row == 0) {
+                    if(this.table.get(row).get(column).equals(heading)) {
+                        iSaveColumn = column; //save the column where the heading was found
+                        columnElements.add(this.payload.get(row).get(iSaveColumn));
+                        break;
+                    }
+                } else {
+                    if (iSaveColumn != -1) {
+                        columnElements.add(this.payload.get(row).get(iSaveColumn));
+                        break;
+                    } else {
+                        System.err.println("Heading was not found in the userdata table.");
+                        System.out.println("Heading was not found in the userdata table.");
+                        break;
+                    }
+                }
+            }
+        }
+        return columnElements;
+    }
+    /**
+     * <b>Getter</b> <p>
      * @param x Representing a row
      * @param y Representing a column
      * @since Release (1st July 2018)
@@ -158,10 +189,41 @@ public class UserDataTable {
     /**
      * <b>Getter</b> <p>
      * @param heading represented by a String
+     * @since Release (1st July 2018)
+     * @return All elements from the userdata table at a sepcified heading
+     */
+    public ArrayList<String> getColumnAt(String heading) {
+        ArrayList<String> columnElements = new ArrayList<>();
+        int iSaveColumn = -1;
+        for (int row = 0; row < this.rowCount; row++) {
+            for (int column = 0; column < this.columnCount; column++) {
+                if(row == 0) {
+                    if(this.table.get(row).get(column).equals(heading)) {
+                        iSaveColumn = column; //save the column where the heading was found
+                        columnElements.add(heading);
+                        break;
+                    }
+                } else {
+                    if (iSaveColumn != -1) {
+                        columnElements.add(this.table.get(row).get(iSaveColumn));
+                        break;
+                    } else {
+                        System.err.println("Heading was not found in the userdata table.");
+                        System.out.println("Heading was not found in the userdata table.");
+                        break;
+                    }
+                }
+            }
+        }
+        return columnElements;
+    }
+    /**
+     * <b>Getter</b> <p>
+     * @param heading represented by a String
      * @return The ID of the column from the userdata table, -1 if heading was not found
      * @since Release (1st July 2018)
      */
-    public int getColumnIDbyHeading(String heading) {
+    public int getColumnIDby(String heading) {
         int columnID = -1;
         for (int column = 0; column < this.columnCount; column++) {
             if(this.headings.get(column).equals(heading)) {columnID = column; break;}

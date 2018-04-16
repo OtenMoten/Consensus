@@ -64,6 +64,26 @@ public class Layout {
     }
     /**
      * <b>Getter</b> <p>
+     * @param heading represented by a String
+     * @since Release (1st July 2018)
+     * @return The column ID where the heading was found.
+     */
+    public int getColumnIDby(String heading) {
+        int columnID = -1;
+        for (int column = 0; column < this.columnCount; column++) {
+            if(this.headings.get(column).equals(heading)) {
+                columnID = column;
+                break;
+            }
+        }
+        if(columnID == -1) {
+            System.err.println("Heading was not found in the layout.");
+            System.out.println("Heading was not found in the layout.");
+        } 
+        return columnID;
+    }
+    /**
+     * <b>Getter</b> <p>
      * @param column representing a Integer
      * @since Release (1st July 2018)
      * @return A heading by a specified column from the layout

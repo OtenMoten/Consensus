@@ -8,19 +8,13 @@ package allocator;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.Vector;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.TableColumn;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -33,7 +27,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  *
@@ -47,14 +40,174 @@ public class FXMLController implements Initializable {
     private Layout layout;
     private FileReader fileReader;
     private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    @FXML private VBox splitPaneVBoxOne; @FXML private VBox splitPaneVBoxTwo; @FXML private VBox splitPaneVBoxThree; @FXML private VBox splitPaneVBoxFour; @FXML private VBox splitPaneVBoxFife;
+    @FXML private HBox splitPaneHBox;
+    
+    @FXML
+    private void printFinalTable() {
+        System.out.println("Actual userdata table: ");
+        for (int row = 0; row < this.userDataTable.getRowCount(); row++) {
+            for (int column = 0; column < this.userDataTable.getColumnCount(); column++) {
+                System.out.print(this.userDataTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        }
+        
+        System.out.println("Actual final table: ");
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+            } System.out.println();
+        }
+    }
+    
+    @FXML
+    private void startAllocation() {
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " \t ");
+            } System.out.println();
+        }
+        selectLayoutHeadings();
+    }
     
     /**
-     * <b>Constructor</b> <p>
+     * Fill in the VBoxes in the SplitPane with the selected headings from 'selectUserData()'
+     * @param selectedHeadings represented by a one-dimensional String ArrayList
+     */
+    private void display(ArrayList<String> selectedHeadings) {
+        int columnCount = selectedHeadings.size();
+        int counter = 0;
+
+        for(int column = 0; column < columnCount; column++) {
+            
+            String currentHeading = selectedHeadings.get(column);
+            Button btnHeading = new Button(selectedHeadings.get(column));
+            btnHeading.setTextAlignment(TextAlignment.CENTER);
+            btnHeading.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+            btnHeading.setFocusTraversable(false);
+
+            btnHeading.setOnDragOver((DragEvent event) -> {
+                /* data is dragged over the target
+                * accept it only if it is not dragged from the same node
+                * and if it has a string data
+                */
+                if (event.getGestureSource() != btnHeading && event.getDragboard().hasString()) { /* allow for moving */ event.acceptTransferModes(TransferMode.MOVE);}
+                event.consume();
+            });
+                
+            btnHeading.setOnDragEntered((DragEvent event) -> {
+                // the drag-and-drop gesture entered the target
+                // show to the user that it is an actual gesture target
+                if (event.getGestureSource() != btnHeading && event.getDragboard().hasString()) {btnHeading.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 14));}
+                event.consume();
+            });
+                
+            btnHeading.setOnDragExited((DragEvent event) -> {
+                // mouse moved away, remove the graphical cues
+                btnHeading.setText(btnHeading.getText());
+                btnHeading.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+                event.consume();
+            });
+
+            btnHeading.setOnDragDropped((DragEvent event) -> {
+                // data dropped
+                // if there is a string data on dragboard, read it and use it
+                Dragboard db = event.getDragboard();
+                //rembember: final table and layout has the same order of headings
+                
+                
+                //alte köpfe enthalten von user data
+                //vielleicht eine zusammenstellung von payload von userdata und headings from layout?
+                //??
+                this.finalTable.setColumnAt(this.layout.getColumnIDby(currentHeading), this.userDataTable.getColumnAt(db.getString())); //köpfe ändern
+                // let the source know whether the string was successfully
+                // transferred and used
+                boolean success = false;
+                if(db.hasString()) {success = true;}
+                event.setDropCompleted(success);
+                btnHeading.setTextFill(Color.DEEPSKYBLUE);
+                event.consume();
+            });
+            
+            switch (counter) {
+                
+                case 0:
+                    splitPaneVBoxOne.getChildren().add(btnHeading);
+                    counter++;
+                    break;
+                    
+                case 1:
+                    splitPaneVBoxTwo.getChildren().add(btnHeading);
+                    counter++;
+                    break;
+                    
+                case 2:
+                    splitPaneVBoxThree.getChildren().add(btnHeading);
+                    counter++;
+                    break;
+                    
+                case 3:
+                    splitPaneVBoxFour.getChildren().add(btnHeading);
+                    counter++;
+                    break;
+                    
+                case 4:
+                    splitPaneVBoxFife.getChildren().add(btnHeading);
+                    counter = 0;
+                    break;
+                    
+                default:
+                    System.out.println("DEFAULT");
+                    alert.setTitle("WARNING!");
+                    alert.setHeaderText("Fatal system error orccured- [DEFAULT switch case region in importHeadings()]");
+                    alert.setContentText("Contact the creator of this program.");
+                    alert.show();
+            } 
+        }
+
+        //Headings from the userdata table in form of Buttons
+        for (int column = 0; column < this.userDataTable.getColumnCount(); column++) {
+
+            Button userdataTableHeading = new Button(this.userDataTable.getTable().get(0).get(column));
+            userdataTableHeading.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+            userdataTableHeading.setFocusTraversable(false);
+            
+            userdataTableHeading.setOnDragDetected((MouseEvent event) -> {
+            // drag was detected, start a drag-and-drop gesture
+            // allow any transfer mode
+            Dragboard db = userdataTableHeading.startDragAndDrop(TransferMode.ANY);
+                
+            // Put a String on a dragboard
+            ClipboardContent content = new ClipboardContent();
+            content.putString(userdataTableHeading.getText());
+            db.setContent(content);
+            //dataTableHeader.setTextFill(Color.DEEPSKYBLUE);
+            //dataTableHeader.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 14));
+            event.consume();
+            });
+                
+            userdataTableHeading.setOnDragDone((DragEvent event) -> {
+            // the drag and drop gesture ended
+            // if the data was successfully moved, clear it
+            if (event.getTransferMode() == TransferMode.MOVE) {
+                userdataTableHeading.setTextFill(Color.GREY);
+                userdataTableHeading.setFont(Font.font("Verdana", FontWeight.LIGHT, 12));
+                userdataTableHeading.setDisable(true);
+            }
+            event.consume();
+            });
+            
+            splitPaneHBox.getChildren().add(userdataTableHeading);
+        }
+        //printTableView();
+    }
+    
+    /**
+     * <b> Operation </b> <p>
+     * Creating a GUI to select which layout headings should be displayed as Drag&Drop element
      * @since Release (1st July 2018)
      */
-
-    private void selectUserData() {
-        
+    private void selectLayoutHeadings() {
         //select the headings of the final table which should be filled with payload from the userdata table
         Stage selectingStage = new Stage();
         
@@ -109,7 +262,7 @@ public class FXMLController implements Initializable {
             
             //if the Accept-Button is clicked then the selected headings will be displayed in the main GUI
             //next step is to apply the headings from the layout to the headings from the userdata table
-            //display(selectedHeadings);
+            display(selectedHeadings);
             
             selectingStage.close();
         });
@@ -155,186 +308,6 @@ public class FXMLController implements Initializable {
         selectingStage.show();
     }
     
-    @FXML
-    private void readInAll() {
-        
-        ArrayList<String> list = new ArrayList<>(5);
-        list.add("1");list.add("2");list.add("3");list.add("4");list.add("5");
-        this.finalTable.addRow(list);
-        
-        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
-            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
-                System.out.print(this.finalTable.getTable().get(row).get(column) + " \t");
-            } System.out.println();
-        }
-        
-        selectUserData();
-        
-    }
-    
-    private void display(ArrayList<String> selectedHeadings) {
-        //save it into controller object data model array
-        controller.setLayoutTable(arrayLayoutTable); 
-
-        btnImport.setDisable(true);
-        
-        String[] layoutTableHeadings = arrayLayoutTable;
-        
-        int columnCount = controller.getDataTable()[0].length;
-        int counter = 0;
-        
-        //Button headings for layout table
-        for(int i = 0; i < layoutTableHeadings.length; i++) {
-            
-            layoutTableHeadings[i] = controller.getHeadingsLayoutTable()[i];
-            
-            Button layoutHeader = new Button(layoutTableHeadings[i]);
-            layoutHeader.setTextAlignment(TextAlignment.CENTER);
-            layoutHeader.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
-            layoutHeader.setFocusTraversable(false);
-
-            layoutHeader.setOnDragOver((DragEvent event) -> {
-            /* data is dragged over the target
-            * accept it only if it is not dragged from the same node
-            * and if it has a string data
-            */
-            if (event.getGestureSource() != layoutHeader && event.getDragboard().hasString()) {
-                    
-                /* allow for moving */
-                event.acceptTransferModes(TransferMode.MOVE);
-            }
-            event.consume();
-            });
-                
-            layoutHeader.setOnDragEntered((DragEvent event) -> {
-            // the drag-and-drop gesture entered the target
-            // show to the user that it is an actual gesture target
-            if (event.getGestureSource() != layoutHeader && event.getDragboard().hasString()) {
-                layoutHeader.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 14));
-            }
-            event.consume();
-            });
-                
-            layoutHeader.setOnDragExited((DragEvent event) -> {
-            // mouse moved away, remove the graphical cues
-            layoutHeader.setText(layoutHeader.getText());
-            layoutHeader.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
-            event.consume();
-            });
-
-            layoutHeader.setOnDragDropped((DragEvent event) -> {
-            // data dropped
-            // if there is a string data on dragboard, read it and use it
-            Dragboard db = event.getDragboard();
-            overwriteDataTableHeading(db.getString(), layoutHeader.getText());
-            boolean success = false;
-            if (db.hasString()) {
-                layoutHeader.setText(layoutHeader.getText() + " \n[" + db.getString() + "]");
-                success = true;
-            }
-            table.getColumns().clear();
-            for(int k=0 ; k < controller.getDataTable()[0].length; k++){
-                //We are using non property style for making dynamic table
-                final int j = k;                
-                TableColumn col = new TableColumn(controller.getDataTable()[0][k]);
-                col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                    
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {                                                                                              
-                        return new SimpleStringProperty(param.getValue().get(j).toString());                        
-                    }                    
-                });
-                table.getColumns().addAll(col); 
-            }
-            
-            // let the source know whether the string was successfully
-            // transferred and used
-            event.setDropCompleted(success);
-            layoutHeader.setTextFill(Color.DEEPSKYBLUE);
-            event.consume();
-            });
-            
-            //hboxLayoutTable.getChildren().add(layoutHeader);
-            
-            switch (counter) {
-                
-                case 0:
-                    vboxSplitPane1.getChildren().add(layoutHeader);
-                    counter++;
-                    break;
-                    
-                case 1:
-                    vboxSplitPane2.getChildren().add(layoutHeader);
-                    counter++;
-                    break;
-                    
-                case 2:
-                    vboxSplitPane3.getChildren().add(layoutHeader);
-                    counter++;
-                    break;
-                    
-                case 3:
-                    vboxSplitPane4.getChildren().add(layoutHeader);
-                    counter++;
-                    break;
-                    
-                case 4:
-                    vboxSplitPane5.getChildren().add(layoutHeader);
-                    counter = 0;
-                    break;
-                    
-                default:
-                    System.out.println("DEFAULT");
-                    alert.setTitle("WARNING!");
-                    alert.setHeaderText("Fatal system error orccured- [DEFAULT switch case region in importHeadings()]");
-                    alert.setContentText("Contact the creator of this program.");
-                    alert.show();
-            } 
-        }
-        controller.setLayoutTable(layoutTableHeadings);
-
-        //Button headings for imported data table
-        for (int j = 0; j < columnCount; j++) {
-
-            Button dataTableHeader = new Button(controller.getDataTable()[0][j]);
-            if("Author".equals(dataTableHeader.getText()) || 
-                    "Year".equals(dataTableHeader.getText())  || 
-                    "Title".equals(dataTableHeader.getText()) || 
-                    "Pages".equals(dataTableHeader.getText()) || 
-                    "Journal".equals(dataTableHeader.getText()))
-            {dataTableHeader.setDisable(true);
-            }
-            dataTableHeader.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
-            dataTableHeader.setFocusTraversable(false);
-            
-            dataTableHeader.setOnDragDetected((MouseEvent event) -> {
-            // drag was detected, start a drag-and-drop gesture
-            // allow any transfer mode
-            Dragboard db = dataTableHeader.startDragAndDrop(TransferMode.ANY);
-                
-            // Put a string on a dragboard
-            ClipboardContent content = new ClipboardContent();
-            content.putString(dataTableHeader.getText());
-            db.setContent(content);
-            //dataTableHeader.setTextFill(Color.DEEPSKYBLUE);
-            //dataTableHeader.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 14));
-            event.consume();
-            });
-                
-            dataTableHeader.setOnDragDone((DragEvent event) -> {
-            // the drag and drop gesture ended
-            // if the data was successfully moved, clear it
-            if (event.getTransferMode() == TransferMode.MOVE) {
-                dataTableHeader.setTextFill(Color.GREY);
-                dataTableHeader.setFont(Font.font("Verdana", FontWeight.LIGHT, 12));
-                dataTableHeader.setDisable(true);
-            }
-            event.consume();
-            });
-            
-            hboxDataTable.getChildren().add(dataTableHeader);
-        }
-        //printTableView();
-    }
-    
     private void testUserDataTable() {
         System.out.println("UserDataTable Class Test");
         
@@ -369,7 +342,7 @@ public class FXMLController implements Initializable {
         System.out.println();
         
         System.out.println("Getting a column ID by heading");
-        System.out.println(this.userDataTable.getColumnIDbyHeading("Heading 5"));
+        System.out.println(this.userDataTable.getColumnIDby("Heading 5"));
         System.out.println();
         
         System.out.println("Getting a element at X,Y");
@@ -475,6 +448,7 @@ public class FXMLController implements Initializable {
         this.metaDataTable = new MetaDataTable(this.fileReader.readInMetaDataTable());
         this.layout = new Layout(this.fileReader.readInLayout(";"));
         (this.finalTable = new FinalTable()).setHeadings(this.layout.getHeadings());
+        this.finalTable.addRow();
        
         System.out.println("initialize done :-)");
     }

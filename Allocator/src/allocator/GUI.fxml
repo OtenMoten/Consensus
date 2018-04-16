@@ -24,13 +24,13 @@
                <items>
                   <HBox alignment="CENTER" minHeight="140.0" minWidth="100.0" prefHeight="205.0" prefWidth="1025.0" spacing="20.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS" />
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS" />
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS" />
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS" />
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS" />
+                        <VBox fx:id="splitPaneVBoxOne" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS" />
+                        <VBox fx:id="splitPaneVBoxTwo" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS" />
+                        <VBox fx:id="splitPaneVBoxThree" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS" />
+                        <VBox fx:id="splitPaneVBoxFour" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS" />
+                        <VBox fx:id="splitPaneVBoxFife" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS" />
                      </children></HBox>
-                  <HBox alignment="CENTER" minHeight="47.0" minWidth="100.0" prefHeight="116.0" prefWidth="1025.0" spacing="20.0" />
+                  <HBox fx:id="splitPaneHBox" alignment="CENTER" minHeight="47.0" minWidth="100.0" prefHeight="116.0" prefWidth="1025.0" spacing="20.0" />
                </items>
             </SplitPane>
          </center>
@@ -49,11 +49,11 @@
          <left>
             <VBox alignment="CENTER" minHeight="200.0" minWidth="100.0" prefHeight="382.0" prefWidth="90.0" spacing="20.0" style="-fx-background-color: #FFFFFF;">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#readInAll" prefHeight="25.0" prefWidth="67.0" text="Import" textAlignment="CENTER">
+                  <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#startAllocation" prefHeight="25.0" prefWidth="67.0" text="Import" textAlignment="CENTER">
                      <effect>
                         <DropShadow blurType="TWO_PASS_BOX" />
                      </effect></Button>
-                  <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Export" textAlignment="CENTER">
+                  <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#printFinalTable" prefHeight="25.0" prefWidth="68.0" text="Export" textAlignment="CENTER">
                      <effect>
                         <DropShadow blurType="TWO_PASS_BOX" />
                      </effect></Button>

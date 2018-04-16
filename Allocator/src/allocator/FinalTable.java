@@ -170,6 +170,11 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public void setColumnAt(int column, ArrayList<String> columnContent) {
+        if(this.rowCount < columnContent.size()) {
+            for (int i = 0; i <= (columnContent.size() - this.rowCount) + 1; i++) {
+                this.addRow();
+            }
+        }
         for (int row = 0; row < this.rowCount; row++) {
             this.table.get(row).set(column, columnContent.get(row));
         }
@@ -336,17 +341,12 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public void addColumn(String heading) {
-        if(heading.matches("[a-zA-Z]+")) { // '+' is a 'reclutant' quantifier and '++' would be 'possesive' quantifier 
-            this.table.get(0).add(heading);
-            this.headings.add(heading); 
-                for (int row = 1; row < this.rowCount; row++) {
-                    this.table.get(row).add("");
-                    this.payload.get(row - 1).add("");
-                } this.setColumnCount();
-        } else {
-            System.err.println("'heading' must be NOT empty.");
-            System.out.println("'heading' must be NOT empty.");
-        }
+        this.table.get(0).add(heading);
+        this.headings.add(heading); 
+            for (int row = 1; row < this.rowCount; row++) {
+                this.table.get(row).add("");
+                this.payload.get(row - 1).add("");
+            } this.setColumnCount();
     }
     /**
      * <b>Column Operation</b> <p>
@@ -465,8 +465,13 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public void addRow() {
-        this.table.add(new ArrayList<>(this.columnCount));
-        this.payload.add(new ArrayList<>(this.columnCount));
+        this.table.add(new ArrayList<>());
+        this.payload.add(new ArrayList<>());
+        this.rowCount = this.table.size();
+        for (int column = 0; column < this.columnCount; column++) {
+            this.table.get(this.rowCount - 1).add("");
+            if(this.rowCount >= 2) {this.payload.get(this.rowCount - 2).add("");}
+        }
         this.setRowCount();
     }
     /**

@@ -5,9 +5,17 @@
  */
 package allocator;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,18 +23,26 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 
 /**
  *
@@ -42,22 +58,76 @@ public class FXMLController implements Initializable {
     private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
     @FXML private VBox splitPaneVBoxOne; @FXML private VBox splitPaneVBoxTwo; @FXML private VBox splitPaneVBoxThree; @FXML private VBox splitPaneVBoxFour; @FXML private VBox splitPaneVBoxFife;
     @FXML private HBox splitPaneHBox;
-    
+
     @FXML
     private void printFinalTable() {
         System.out.println("Actual userdata table: ");
         for (int row = 0; row < this.userDataTable.getRowCount(); row++) {
             for (int column = 0; column < this.userDataTable.getColumnCount(); column++) {
-                System.out.print(this.userDataTable.getTable().get(row).get(column) + " ");
+                System.out.print(this.userDataTable.getTable().get(row).get(column) + " \t ");
             } System.out.println();
         }
         
         System.out.println("Actual final table: ");
         for (int row = 0; row < this.finalTable.getRowCount(); row++) {
             for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
-                System.out.print(this.finalTable.getTable().get(row).get(column) + " ");
+                System.out.print(this.finalTable.getTable().get(row).get(column) + " \t ");
             } System.out.println();
         }
+        
+        String finaTablePath = outputFileDialog();
+       
+        //Create blank workbook
+        HSSFWorkbook finalWorkbook = new HSSFWorkbook();
+        //Create a blank sheet
+        HSSFSheet finalSpreadsheet = finalWorkbook.createSheet(finaTablePath.split("\\\\")[finaTablePath.split("\\\\").length - 1]);
+        //Create row object
+        HSSFRow finalRow;
+        //This data needs to be written (Object[])
+        Map < Integer, String[] > empinfo = new TreeMap <>();
+        String[] tmpArray;
+        
+        //read out the finalTable-object and put each row into the map
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            
+            //'tmpArray' needs for every row a new instance
+            //each key in 'empinfo' holds different instances of tmpArray
+            //because else every key would have the same value in 'tmpArray'
+            tmpArray = new String[this.finalTable.getColumnCount()];
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                tmpArray[column] = this.finalTable.getTable().get(row).get(column);
+            }
+            empinfo.put(row, tmpArray);
+        }
+      
+        //Iterate over data and write to sheet
+        Set < Integer > keyid = empinfo.keySet();
+        int rowid = 0;
+
+        for (Integer key : keyid) {
+            
+            finalRow = finalSpreadsheet.createRow(rowid++);
+            String[] strArr = empinfo.get(key);
+         
+            int cellid = 0;
+            for (String str : strArr) {
+                Cell finalCell = finalRow.createCell(cellid++);
+                finalCell.setCellValue(str);
+            }
+        }
+
+        try ( //Write the workbook in file system
+            FileOutputStream out = new FileOutputStream(new File(finaTablePath))) {
+            finalWorkbook.write(out);
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Maybe your Excel file is open ..");
+            System.out.println("Maybe your Excel file is open ..");
+        }
+        alert.setTitle("Information");
+        alert.setHeaderText("Export finished");
+        alert.setContentText(finaTablePath);
+        alert.show();     
     }
     
     @FXML
@@ -114,12 +184,12 @@ public class FXMLController implements Initializable {
                 // if there is a string data on dragboard, read it and use it
                 Dragboard db = event.getDragboard();
                 //rembember: final table and layout has the same order of headings
-                
-                
-                //alte köpfe enthalten von user data
-                //vielleicht eine zusammenstellung von payload von userdata und headings from layout?
-                //??
-                this.finalTable.setColumnAt(this.layout.getColumnIDby(currentHeading), this.userDataTable.getColumnAt(db.getString())); //köpfe ändern
+                //get the payload from a specified column in the userdata table
+                ArrayList<String> finalTableColumn = new ArrayList<>(this.userDataTable.getPayloadColumnAt(db.getString()));
+                //add the, via Drag&Drop, allocated heading to the payload column on top
+                finalTableColumn.add(0, currentHeading);
+                //put the column with userdata payload and heading from layout at a specified column in the final table
+                this.finalTable.setColumnAt(this.layout.getColumnIDby(currentHeading), finalTableColumn);
                 // let the source know whether the string was successfully
                 // transferred and used
                 boolean success = false;
@@ -439,6 +509,30 @@ public class FXMLController implements Initializable {
     
     private void testFinalTable() {
         System.out.println("FinalTable Class Test");
+    }
+    
+    private String outputFileDialog() {
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+        // Erzeugung eines neuen Frames mit dem Titel "Dateiauswahl"
+        JFrame parentJFrame = new JFrame("Save as ..");
+        // Wir setzen die Breite auf 450 und die Höhe 300 pixel
+        parentJFrame.setSize(450,300);
+        // Hole den ContentPane und füge diesem unseren JFileChooser hinzu      
+        parentJFrame.getContentPane().add(fileChooser);
+        // Wir lassen unseren Frame anzeigen
+        parentJFrame.setVisible(true);
+        
+        int userSelection = fileChooser.showSaveDialog(parentJFrame);
+        String finalTablePath = "";
+        
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            finalTablePath = fileToSave.getAbsolutePath();
+            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+        }
+        return finalTablePath;
     }
     
     @Override

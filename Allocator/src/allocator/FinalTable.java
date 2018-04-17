@@ -170,8 +170,16 @@ public class FinalTable {
      * @since Release (1st July 2018)
      */
     public void setColumnAt(int column, ArrayList<String> columnContent) {
-        if(this.rowCount < columnContent.size()) {
-            for (int i = 0; i <= (columnContent.size() - this.rowCount) + 1; i++) {
+        /* We need to seperate the rowCount of the final table into a seperated Integer variable.
+         * The reason for this is when 'this.addRow()' is executed then the all-over rowCount is increased immediatily.
+         * This will lead to internal errors within the first for-loop
+         * Don't think about - accept it! =D 
+         * Try to replace 'seperateRowCountOfFinalTable' with 'this.rowCount' - the final table will be incorrect!
+         */
+        int seperateRowCount = this.rowCount;
+        
+        if(seperateRowCount < columnContent.size()) {
+            for (int i = 0; i < (columnContent.size() - seperateRowCount); i++) {
                 this.addRow();
             }
         }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package allocator;
+package consensus;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -128,7 +128,7 @@ public class FXMLController implements Initializable {
         alert.show();     
     }
     
-    @FXML
+    @FXML //mapped to 'Import'-button in the main GUI
     private void startAllocation() {
         for (int row = 0; row < this.finalTable.getRowCount(); row++) {
             for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
@@ -139,7 +139,9 @@ public class FXMLController implements Initializable {
     }
     
     /**
-     * Fill in the VBoxes in the SplitPane with the selected headings from 'selectUserData()'
+     * Fill in the VBoxes in the SplitPane with the selected headings from 'selectUserData()'. <p>
+     * Furthermore, the Drag&Drop functionality are given to the displayed elements 
+     * ('selected Headings' = partial Layout-object headings and the headings from the userDataTable-object).
      * @param selectedHeadings represented by a one-dimensional String ArrayList
      */
     private void display(ArrayList<String> selectedHeadings) {
@@ -509,6 +511,11 @@ public class FXMLController implements Initializable {
         System.out.println("FinalTable Class Test");
     }
     
+    /**
+     * <b> GUI-Operation </b> <p>
+     * The user will be encouraged to select the folder and enter the file name where the final table Excel file should be saved. <p>
+     * @return The path to the final table Excel file
+     */
     private String outputFileDialog() {
 
         JFileChooser fileChooser = new JFileChooser();

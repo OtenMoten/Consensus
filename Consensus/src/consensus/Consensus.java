@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package allocator;
+package consensus;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +15,7 @@ import javafx.stage.Stage;
  *
  * @author Kevin
  */
-public class Allocator extends Application {
+public class Consensus extends Application {
     
     @Override
     public void start(Stage rootStage) throws Exception {

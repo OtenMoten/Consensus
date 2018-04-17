@@ -195,6 +195,7 @@ public class FXMLController implements Initializable {
                 // transferred and used
                 boolean success = false;
                 if(db.hasString()) {success = true;}
+                btnHeading.setText(btnHeading.getText() + "\n" + "[" + db.getString() + "]");
                 event.setDropCompleted(success);
                 btnHeading.setTextFill(Color.DEEPSKYBLUE);
                 event.consume();

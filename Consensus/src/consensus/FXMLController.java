@@ -540,8 +540,6 @@ public class FXMLController implements Initializable {
         System.out.println("FinalTable Class Test");
     }
     
-    
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.fileReader = new FileReader("C:\\Test_Extraktor\\Internal\\Boulard_et_al._2018__polare_AM.xls", "C:\\Test_Extraktor\\Internal\\metadata.xml", "\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\LO_Arne.csv");

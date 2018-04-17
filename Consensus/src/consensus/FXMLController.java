@@ -129,16 +129,6 @@ public class FXMLController implements Initializable {
         alert.show();     
     }
     
-    @FXML //mapped to 'Import'-button in the main GUI
-    private void startAllocation() {
-        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
-            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
-                System.out.print(this.finalTable.getTable().get(row).get(column) + " \t ");
-            } System.out.println();
-        }
-        selectLayoutHeadings();
-    }
-    
     /**
      * Fill in the VBoxes in the SplitPane with the selected headings from 'selectUserData()'. <p>
      * Furthermore, the Drag&Drop functionality are given to the displayed elements 
@@ -279,6 +269,7 @@ public class FXMLController implements Initializable {
      * Creating a GUI to select which layout headings should be displayed as Drag&Drop element
      * @since Release (1st July 2018)
      */
+    @FXML //mapped to 'Import'-button in the main GUI
     private void selectLayoutHeadings() {
         //select the headings of the final table which should be filled with payload from the userdata table
         Stage selectingStage = new Stage();

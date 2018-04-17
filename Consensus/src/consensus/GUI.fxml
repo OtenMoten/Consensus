@@ -49,7 +49,7 @@
          <left>
             <VBox alignment="CENTER" minHeight="200.0" minWidth="100.0" prefHeight="382.0" prefWidth="90.0" spacing="20.0" style="-fx-background-color: #FFFFFF;">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#startAllocation" prefHeight="25.0" prefWidth="67.0" text="Import" textAlignment="CENTER">
+                  <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#selectLayoutHeadings" prefHeight="25.0" prefWidth="67.0" text="Import" textAlignment="CENTER">
                      <effect>
                         <DropShadow blurType="TWO_PASS_BOX" />
                      </effect></Button>

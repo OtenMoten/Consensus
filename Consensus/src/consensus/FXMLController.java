@@ -58,7 +58,13 @@ public class FXMLController implements Initializable {
     @FXML private VBox splitPaneVBoxOne; @FXML private VBox splitPaneVBoxTwo; @FXML private VBox splitPaneVBoxThree; @FXML private VBox splitPaneVBoxFour; @FXML private VBox splitPaneVBoxFife;
     @FXML private HBox splitPaneHBox;
 
-    @FXML
+    
+    /**
+     * <b> Operation </b> <p>
+     * 
+     * Export the FinalTable-object into a Excel file.
+     */
+    @FXML //mapped to "Export"-button in the main GUI
     private void printFinalTable() {
         System.out.println("Actual userdata table: ");
         for (int row = 0; row < this.userDataTable.getRowCount(); row++) {
@@ -127,6 +133,114 @@ public class FXMLController implements Initializable {
         alert.setHeaderText("Export finished");
         alert.setContentText(finaTablePath);
         alert.show();     
+    }
+
+    /**
+     * <b> Operation </b> <p>
+     * Creating a GUI to select which layout headings should be displayed as Drag&Drop element
+     * @since Release (1st July 2018)
+     */
+    @FXML //mapped to 'Import'-button in the main GUI
+    private void selectLayoutHeadings() {
+        //select the headings of the final table which should be filled with payload from the userdata table
+        Stage selectingStage = new Stage();
+        selectingStage.initModality(Modality.APPLICATION_MODAL);
+        
+        HBox hboxContainer = new HBox();
+        hboxContainer.setSpacing(10);
+        
+        VBox vboxLeft = new VBox(); VBox vboxMid = new VBox(); VBox vboxRight = new VBox();
+        vboxLeft.setSpacing(10); vboxMid.setSpacing(10); vboxRight.setSpacing(10);
+        
+        hboxContainer.getChildren().addAll(vboxLeft, vboxMid, vboxRight);
+        Scene scene = new Scene(hboxContainer);
+        
+        selectingStage.setTitle("Selecting headings from Layout");
+        selectingStage.setWidth(900);
+        selectingStage.setHeight(550);
+        
+        ArrayList<String> selectedHeadings = new ArrayList<>();
+        
+        Button btnAccept = new Button("Accept");
+        btnAccept.setPrefSize(100, 30);
+        btnAccept.setMinSize(100, 30);
+        btnAccept.setMaxSize(100, 30);
+        btnAccept.autosize();
+        btnAccept.setTextAlignment(TextAlignment.CENTER);
+        btnAccept.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+        btnAccept.setFocusTraversable(false);
+        btnAccept.setOnAction((ActionEvent event) -> {
+            for (int i = 0; i < vboxLeft.getChildren().size(); i++) {
+                if(vboxLeft.getChildren().get(i) instanceof Button) {/*do nothing*/} 
+                else { //get the text of the heading
+                    if(((CheckBox) vboxLeft.getChildren().get(i)).isSelected() == true) {
+                        selectedHeadings.add(((CheckBox) vboxLeft.getChildren().get(i)).getText());
+                    }
+                }
+            }
+            for (int i = 0; i < vboxMid.getChildren().size(); i++) {
+                if(vboxMid.getChildren().get(i) instanceof Button) {/*do nothing*/} 
+                else { //get the text of the heading
+                    if(((CheckBox) vboxMid.getChildren().get(i)).isSelected() == true) {
+                        selectedHeadings.add(((CheckBox) vboxMid.getChildren().get(i)).getText());
+                    }
+                }
+            }
+            for (int i = 0; i < vboxRight.getChildren().size(); i++) {
+                if(vboxRight.getChildren().get(i) instanceof Button) {/*do nothing*/} 
+                else { //get the text of the heading
+                    if(((CheckBox) vboxRight.getChildren().get(i)).isSelected() == true) {
+                        selectedHeadings.add(((CheckBox) vboxRight.getChildren().get(i)).getText());
+                    }
+                }
+            }
+            
+            //if the Accept-Button is clicked then the selected headings will be displayed in the main GUI
+            //next step is to apply the headings from the layout to the headings from the userdata table
+            display(selectedHeadings);
+            
+            selectingStage.close();
+        });
+        
+        final ArrayList<String> headings = this.layout.getHeadings();
+        int counter = 1;
+        
+        for (int i = 0; i < headings.size(); i++) {
+            
+            if(counter == 4) {counter = 1;}
+            
+            final CheckBox checkBox = new CheckBox(headings.get(i));
+            
+            //final Tooltip tooltip = new Tooltip("$ tooltip");
+            //tooltip.setFont(new Font("Arial", 16));
+            checkBox.setStyle("-fx-border-color: lightblue; " + "-fx-font-size: 20;" + "-fx-border-insets: -5; " + "-fx-border-radius: 5;" + "-fx-border-style: dotted;" + "-fx-border-width: 2;");
+            //cb.setTooltip(tooltip);
+            
+            switch(counter) {
+                case 1:
+                    vboxLeft.getChildren().add(checkBox);
+                    counter++;
+                    if(i+1 == headings.size()) {vboxLeft.getChildren().add(btnAccept);}
+                    break;
+                case 2:
+                    vboxMid.getChildren().add(checkBox);
+                    counter++;
+                    if(i+1 == headings.size()) {vboxMid.getChildren().add(btnAccept);}
+                    break;
+                case 3:
+                    vboxRight.getChildren().add(checkBox);
+                    counter++;
+                    if(i+1 == headings.size()) {vboxRight.getChildren().add(btnAccept);}
+                    break;
+                default:
+                    alert.setTitle("INFORMATION!");
+                    alert.setHeaderText("Internal error occured - switch-case in test()");
+                    alert.setContentText("Contact the creator of this program.");
+                    alert.show();
+            }
+        }
+        selectingStage.setScene(scene);
+        selectingStage.show();
     }
     
     /**
@@ -265,111 +379,32 @@ public class FXMLController implements Initializable {
     }
     
     /**
-     * <b> Operation </b> <p>
-     * Creating a GUI to select which layout headings should be displayed as Drag&Drop element
-     * @since Release (1st July 2018)
+     * <b> GUI-Operation </b> <p>
+     * The user will be encouraged to select the folder and enter the file name where the final table Excel file should be saved. <p>
+     * @return The path to the final table Excel file
      */
-    @FXML //mapped to 'Import'-button in the main GUI
-    private void selectLayoutHeadings() {
-        //select the headings of the final table which should be filled with payload from the userdata table
-        Stage selectingStage = new Stage();
-        selectingStage.initModality(Modality.APPLICATION_MODAL);
+    private String outputFileDialog() {
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+        JFrame parentJFrame = new JFrame("Save as ..");
+        parentJFrame.setSize(450,300);     
+        parentJFrame.getContentPane().add(fileChooser);
+        parentJFrame.setVisible(true);
         
-        HBox hboxContainer = new HBox();
-        hboxContainer.setSpacing(10);
+        int userSelection = fileChooser.showSaveDialog(parentJFrame);
+        File fileToSave = new File("");
         
-        VBox vboxLeft = new VBox(); VBox vboxMid = new VBox(); VBox vboxRight = new VBox();
-        vboxLeft.setSpacing(10); vboxMid.setSpacing(10); vboxRight.setSpacing(10);
-        
-        hboxContainer.getChildren().addAll(vboxLeft, vboxMid, vboxRight);
-        Scene scene = new Scene(hboxContainer);
-        
-        selectingStage.setTitle("Selecting headings from Layout");
-        selectingStage.setWidth(900);
-        selectingStage.setHeight(550);
-        
-        ArrayList<String> selectedHeadings = new ArrayList<>();
-        
-        Button btnAccept = new Button("Accept");
-        btnAccept.setPrefSize(100, 30);
-        btnAccept.setMinSize(100, 30);
-        btnAccept.setMaxSize(100, 30);
-        btnAccept.autosize();
-        btnAccept.setTextAlignment(TextAlignment.CENTER);
-        btnAccept.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
-        btnAccept.setFocusTraversable(false);
-        btnAccept.setOnAction((ActionEvent event) -> {
-            for (int i = 0; i < vboxLeft.getChildren().size(); i++) {
-                if(vboxLeft.getChildren().get(i) instanceof Button) {/*do nothing*/} 
-                else { //get the text of the heading
-                    if(((CheckBox) vboxLeft.getChildren().get(i)).isSelected() == true) {
-                        selectedHeadings.add(((CheckBox) vboxLeft.getChildren().get(i)).getText());
-                    }
-                }
-            }
-            for (int i = 0; i < vboxMid.getChildren().size(); i++) {
-                if(vboxMid.getChildren().get(i) instanceof Button) {/*do nothing*/} 
-                else { //get the text of the heading
-                    if(((CheckBox) vboxMid.getChildren().get(i)).isSelected() == true) {
-                        selectedHeadings.add(((CheckBox) vboxMid.getChildren().get(i)).getText());
-                    }
-                }
-            }
-            for (int i = 0; i < vboxRight.getChildren().size(); i++) {
-                if(vboxRight.getChildren().get(i) instanceof Button) {/*do nothing*/} 
-                else { //get the text of the heading
-                    if(((CheckBox) vboxRight.getChildren().get(i)).isSelected() == true) {
-                        selectedHeadings.add(((CheckBox) vboxRight.getChildren().get(i)).getText());
-                    }
-                }
-            }
-            
-            //if the Accept-Button is clicked then the selected headings will be displayed in the main GUI
-            //next step is to apply the headings from the layout to the headings from the userdata table
-            display(selectedHeadings);
-            
-            selectingStage.close();
-        });
-        
-        final ArrayList<String> headings = this.layout.getHeadings();
-        int counter = 1;
-        
-        for (int i = 0; i < headings.size(); i++) {
-            
-            if(counter == 4) {counter = 1;}
-            
-            final CheckBox checkBox = new CheckBox(headings.get(i));
-            
-            //final Tooltip tooltip = new Tooltip("$ tooltip");
-            //tooltip.setFont(new Font("Arial", 16));
-            checkBox.setStyle("-fx-border-color: lightblue; " + "-fx-font-size: 20;" + "-fx-border-insets: -5; " + "-fx-border-radius: 5;" + "-fx-border-style: dotted;" + "-fx-border-width: 2;");
-            //cb.setTooltip(tooltip);
-            
-            switch(counter) {
-                case 1:
-                    vboxLeft.getChildren().add(checkBox);
-                    counter++;
-                    if(i+1 == headings.size()) {vboxLeft.getChildren().add(btnAccept);}
-                    break;
-                case 2:
-                    vboxMid.getChildren().add(checkBox);
-                    counter++;
-                    if(i+1 == headings.size()) {vboxMid.getChildren().add(btnAccept);}
-                    break;
-                case 3:
-                    vboxRight.getChildren().add(checkBox);
-                    counter++;
-                    if(i+1 == headings.size()) {vboxRight.getChildren().add(btnAccept);}
-                    break;
-                default:
-                    alert.setTitle("INFORMATION!");
-                    alert.setHeaderText("Internal error occured - switch-case in test()");
-                    alert.setContentText("Contact the creator of this program.");
-                    alert.show();
-            }
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            fileToSave = fileChooser.getSelectedFile();
+            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+            parentJFrame.setVisible(false);
+            parentJFrame.dispose();
+            return fileToSave.getAbsolutePath();
         }
-        selectingStage.setScene(scene);
-        selectingStage.show();
+        parentJFrame.setVisible(false);
+        parentJFrame.dispose();
+        return fileToSave.getAbsolutePath();
     }
     
     private void testUserDataTable() {
@@ -505,34 +540,7 @@ public class FXMLController implements Initializable {
         System.out.println("FinalTable Class Test");
     }
     
-    /**
-     * <b> GUI-Operation </b> <p>
-     * The user will be encouraged to select the folder and enter the file name where the final table Excel file should be saved. <p>
-     * @return The path to the final table Excel file
-     */
-    private String outputFileDialog() {
-
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-        JFrame parentJFrame = new JFrame("Save as ..");
-        parentJFrame.setSize(450,300);     
-        parentJFrame.getContentPane().add(fileChooser);
-        parentJFrame.setVisible(true);
-        
-        int userSelection = fileChooser.showSaveDialog(parentJFrame);
-        File fileToSave = new File("");
-        
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            fileToSave = fileChooser.getSelectedFile();
-            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
-            parentJFrame.setVisible(false);
-            parentJFrame.dispose();
-            return fileToSave.getAbsolutePath();
-        }
-        parentJFrame.setVisible(false);
-        parentJFrame.dispose();
-        return fileToSave.getAbsolutePath();
-    }
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

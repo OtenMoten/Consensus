@@ -34,6 +34,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -280,6 +281,7 @@ public class FXMLController implements Initializable {
     private void selectLayoutHeadings() {
         //select the headings of the final table which should be filled with payload from the userdata table
         Stage selectingStage = new Stage();
+        selectingStage.initModality(Modality.APPLICATION_MODAL);
         
         HBox hboxContainer = new HBox();
         hboxContainer.setSpacing(10);
@@ -520,24 +522,24 @@ public class FXMLController implements Initializable {
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-        // Erzeugung eines neuen Frames mit dem Titel "Dateiauswahl"
         JFrame parentJFrame = new JFrame("Save as ..");
-        // Wir setzen die Breite auf 450 und die Höhe 300 pixel
-        parentJFrame.setSize(450,300);
-        // Hole den ContentPane und füge diesem unseren JFileChooser hinzu      
+        parentJFrame.setSize(450,300);     
         parentJFrame.getContentPane().add(fileChooser);
-        // Wir lassen unseren Frame anzeigen
         parentJFrame.setVisible(true);
         
         int userSelection = fileChooser.showSaveDialog(parentJFrame);
-        String finalTablePath = "";
+        File fileToSave = new File("");
         
         if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File fileToSave = fileChooser.getSelectedFile();
-            finalTablePath = fileToSave.getAbsolutePath();
+            fileToSave = fileChooser.getSelectedFile();
             System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+            parentJFrame.setVisible(false);
+            parentJFrame.dispose();
+            return fileToSave.getAbsolutePath();
         }
-        return finalTablePath;
+        parentJFrame.setVisible(false);
+        parentJFrame.dispose();
+        return fileToSave.getAbsolutePath();
     }
     
     @Override

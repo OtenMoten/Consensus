@@ -5,6 +5,8 @@
  */
 package consensus;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,13 +25,17 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -63,16 +69,20 @@ public class FXMLController implements Initializable {
     private Layout layout;
     private FileReader fileReader;
     private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    ArrayList<String> globalSelectedHeadings = new ArrayList<>();
+    ArrayList<String> globalNonSelectedHeadings = new ArrayList<>();
     @FXML private VBox splitPaneVBoxOne; @FXML private VBox splitPaneVBoxTwo; @FXML private VBox splitPaneVBoxThree; @FXML private VBox splitPaneVBoxFour; @FXML private VBox splitPaneVBoxFife;
     @FXML private HBox splitPaneHBox;
     @FXML private TableView tableView;
+    @FXML private ListView listView;
+    @FXML private Button btnExport;
 
     /**
      * <b> Operation </b> <p>
      * 
      * Export the FinalTable-object into a Excel file.
      */
-    @FXML //mapped to "Export"-button in the main GUI
+    @FXML // mapped to "Export"-button in the main GUI
     private void printFinalTable() {
         System.out.println("Actual userdata table: ");
         for (int row = 0; row < this.userDataTable.getRowCount(); row++) {
@@ -145,12 +155,12 @@ public class FXMLController implements Initializable {
 
     /**
      * <b> Operation </b> <p>
-     * Creating a GUI to select which layout headings should be displayed as Drag&Drop element
+     * Creating a GUI to select which layout headings should be displayed as Drag&Drop element. <p>
+     * Select the headings of the final table which should be filled with payload from the userdata table. <p>
      * @since Release (1st July 2018)
      */
-    @FXML //mapped to 'Import'-button in the main GUI
+    @FXML // mapped to 'Import'-button in the main GUI
     private void selectLayoutHeadings() {
-        //select the headings of the final table which should be filled with payload from the userdata table
         Stage selectingStage = new Stage();
         selectingStage.initModality(Modality.APPLICATION_MODAL);
         
@@ -183,7 +193,8 @@ public class FXMLController implements Initializable {
                 else { //get the text of the heading
                     if(((CheckBox) vboxLeft.getChildren().get(i)).isSelected() == true) {
                         selectedHeadings.add(((CheckBox) vboxLeft.getChildren().get(i)).getText());
-                    }
+                        this.globalSelectedHeadings.add(((CheckBox) vboxLeft.getChildren().get(i)).getText());
+                    } else {this.globalNonSelectedHeadings.add(((CheckBox) vboxLeft.getChildren().get(i)).getText());}
                 }
             }
             for (int i = 0; i < vboxMid.getChildren().size(); i++) {
@@ -191,7 +202,8 @@ public class FXMLController implements Initializable {
                 else { //get the text of the heading
                     if(((CheckBox) vboxMid.getChildren().get(i)).isSelected() == true) {
                         selectedHeadings.add(((CheckBox) vboxMid.getChildren().get(i)).getText());
-                    }
+                        this.globalSelectedHeadings.add(((CheckBox) vboxMid.getChildren().get(i)).getText());
+                    } else {this.globalNonSelectedHeadings.add(((CheckBox) vboxMid.getChildren().get(i)).getText());}
                 }
             }
             for (int i = 0; i < vboxRight.getChildren().size(); i++) {
@@ -199,7 +211,8 @@ public class FXMLController implements Initializable {
                 else { //get the text of the heading
                     if(((CheckBox) vboxRight.getChildren().get(i)).isSelected() == true) {
                         selectedHeadings.add(((CheckBox) vboxRight.getChildren().get(i)).getText());
-                    }
+                        this.globalSelectedHeadings.add(((CheckBox) vboxRight.getChildren().get(i)).getText());
+                    } else {this.globalNonSelectedHeadings.add(((CheckBox) vboxRight.getChildren().get(i)).getText());}
                 }
             }
             
@@ -252,12 +265,58 @@ public class FXMLController implements Initializable {
     }
     
     /**
+     * <b> GUI-Operation </b> <p>
+     * The user will be encouraged to allocate the metadata to the final table. <p>
+     */
+    @FXML // mapped to 'Next'-button in the main GUI
+    private void allocateMetaData() {
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        
+        HBox hboxContainer = new HBox();
+        hboxContainer.setSpacing(10);
+        
+        VBox vboxLeft = new VBox(); vboxLeft.setSpacing(35); vboxLeft.setAlignment(Pos.CENTER);
+        VBox vboxRight = new VBox(); vboxRight.setSpacing(25); vboxRight.setAlignment(Pos.CENTER);
+        
+        hboxContainer.getChildren().addAll(vboxLeft, vboxRight);
+        Scene scene = new Scene(hboxContainer);
+        
+        stage.setTitle("Allocate the meta data");
+        stage.setWidth(900);
+        stage.setHeight(550);
+        
+        for (String globalNonSelectedHeading : this.globalNonSelectedHeadings) {
+            Label labelGlobalNonSelectedHeading = new Label(globalNonSelectedHeading);
+            labelGlobalNonSelectedHeading.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 12));
+            
+            TextField textfieldGlobalNonSelectedHeading = new TextField(globalNonSelectedHeading);
+            
+            vboxLeft.getChildren().add(labelGlobalNonSelectedHeading);
+            vboxRight.getChildren().add(textfieldGlobalNonSelectedHeading);
+        }
+        
+        stage.setScene(scene);
+        stage.show();
+        this.btnExport.setDisable(false);
+    }
+    
+    /**
      * Fill in the VBoxes in the SplitPane with the selected headings from 'selectUserData()'. <p>
      * Furthermore, the Drag&Drop functionality are given to the displayed elements 
      * ('selected Headings' = partial Layout-object headings and the headings from the userDataTable-object).
      * @param selectedHeadings represented by a one-dimensional String ArrayList
      */
     private void display(ArrayList<String> selectedHeadings) {
+        this.globalSelectedHeadings = selectedHeadings;
+        // only for show-case
+        // add manually the metadata
+        ArrayList<String> dummy = new ArrayList<>();
+        for (int row = 0; row < this.userDataTable.getRowCount(); row++) {
+            dummy.add("Boulard et al. 2018");
+        } dummy.set(0, "Literature Citation");
+        this.finalTable.setColumnAt(this.finalTable.getColumnCount() - 1, dummy);
+        
         int columnCount = selectedHeadings.size();
         int counter = 0;
 
@@ -386,7 +445,6 @@ public class FXMLController implements Initializable {
             
             splitPaneHBox.getChildren().add(userdataTableHeading);
         }
-        //printTableView();
     }
     
     /**
@@ -455,10 +513,26 @@ public class FXMLController implements Initializable {
     
     /**
      * <b> GUI-Operation </b> <p>
-     * The user will be encouraged to allocate the metadata to the final table. <p>
+     * Manage the list items at the right site of the GUI. <p>
+     * These list items source is a folder with several .csv-files.
      */
-    private void allocateMetaData() {
+    private void loadListView() {
+        ObservableList<String> elementList = FXCollections.observableArrayList();
         
+        try {
+            Files.walk(Paths.get("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\")).filter(Files::isRegularFile).forEach(filePath ->{
+                String name = "\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\" + filePath.getFileName().toString();
+                if(name.startsWith("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\LO")) {
+                    elementList.add(filePath.getFileName().toString());
+                }
+            });
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error in 'loadListView()'");
+            System.err.println("Error in 'loadListView()'");
+        }
+        listView.setItems(elementList);
+        listView.refresh();
     }
     
     private void testUserDataTable() {
@@ -602,6 +676,8 @@ public class FXMLController implements Initializable {
         this.layout = new Layout(this.fileReader.readInLayout(";"));
         (this.finalTable = new FinalTable()).setHeadings(this.layout.getHeadings());
         this.finalTable.addRow();
+        
+        loadListView();
 
         System.out.println("initialize done :-)");
     }

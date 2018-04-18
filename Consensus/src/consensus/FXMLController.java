@@ -429,14 +429,13 @@ public class FXMLController implements Initializable {
         this.tableView.getItems().clear();
         
         ObservableList<ObservableList> dataList = FXCollections.observableArrayList();
-        ObservableList<String> rowElements = FXCollections.observableArrayList();
-        TableColumn tableColumn;
 
         for(int column = 0 ; column < this.finalTable.getColumnCount(); column++){
             //We are using non-property style for making dynamic table
             final int columnCopy = column;                
-            tableColumn = new TableColumn(this.finalTable.getHeadings().get(column));
+            TableColumn tableColumn = new TableColumn(this.finalTable.getHeadings().get(column));
             tableColumn.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                    
+                    @Override
                     public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                              
                         return new SimpleStringProperty(param.getValue().get(columnCopy).toString());                        
                     }                    
@@ -445,6 +444,7 @@ public class FXMLController implements Initializable {
         }
         
         for (int row = 1; row < this.finalTable.getRowCount(); row++) {
+            ObservableList<String> rowElements = FXCollections.observableArrayList();
             for(int column = 0 ; column < this.finalTable.getColumnCount(); column++){
                 rowElements.add(this.finalTable.getTable().get(row).get(column));
             }

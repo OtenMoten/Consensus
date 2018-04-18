@@ -16,6 +16,10 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,6 +27,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -36,6 +43,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -57,8 +65,8 @@ public class FXMLController implements Initializable {
     private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
     @FXML private VBox splitPaneVBoxOne; @FXML private VBox splitPaneVBoxTwo; @FXML private VBox splitPaneVBoxThree; @FXML private VBox splitPaneVBoxFour; @FXML private VBox splitPaneVBoxFife;
     @FXML private HBox splitPaneHBox;
+    @FXML private TableView tableView;
 
-    
     /**
      * <b> Operation </b> <p>
      * 
@@ -288,18 +296,21 @@ public class FXMLController implements Initializable {
                 // data dropped
                 // if there is a string data on dragboard, read it and use it
                 Dragboard db = event.getDragboard();
-                //rembember: final table and layout has the same order of headings
-                //get the payload from a specified column in the userdata table
+                // rembember: final table and layout has the same order of headings
+                // get the payload from a specified column in the userdata table
                 ArrayList<String> finalTableColumn = new ArrayList<>(this.userDataTable.getPayloadColumnAt(db.getString()));
-                //add the, via Drag&Drop, allocated heading to the payload column on top
+                // add the, via Drag&Drop, allocated heading to the payload column on top
                 finalTableColumn.add(0, currentHeading);
-                //put the column with userdata payload and heading from layout at a specified column in the final table
+                // put the column with userdata payload and heading from layout at a specified column in the final table
                 this.finalTable.setColumnAt(this.layout.getColumnIDby(currentHeading), finalTableColumn);
                 // let the source know whether the string was successfully
                 // transferred and used
                 boolean success = false;
                 if(db.hasString()) {success = true;}
+                // Create a new text on the layout heading button
                 btnHeading.setText(btnHeading.getText() + "\n" + "[" + db.getString() + "]");
+                // Update the tableView-object
+                this.printTableView();
                 event.setDropCompleted(success);
                 btnHeading.setTextFill(Color.DEEPSKYBLUE);
                 event.consume();
@@ -405,6 +416,49 @@ public class FXMLController implements Initializable {
         parentJFrame.setVisible(false);
         parentJFrame.dispose();
         return fileToSave.getAbsolutePath();
+    }
+    
+    /**
+     * <b> GUI-Operation </b> <p>
+     * This function manage the tableView-object. <p>
+     * Source is the current finalTable-object.
+     */
+    private void printTableView() {
+        
+        this.tableView.getColumns().clear();
+        this.tableView.getItems().clear();
+        
+        ObservableList<ObservableList> dataList = FXCollections.observableArrayList();
+        ObservableList<String> rowElements = FXCollections.observableArrayList();
+        TableColumn tableColumn;
+
+        for(int column = 0 ; column < this.finalTable.getColumnCount(); column++){
+            //We are using non-property style for making dynamic table
+            final int columnCopy = column;                
+            tableColumn = new TableColumn(this.finalTable.getHeadings().get(column));
+            tableColumn.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                    
+                    public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                              
+                        return new SimpleStringProperty(param.getValue().get(columnCopy).toString());                        
+                    }                    
+            });
+            this.tableView.getColumns().addAll(tableColumn); 
+        }
+        
+        for (int row = 1; row < this.finalTable.getRowCount(); row++) {
+            for(int column = 0 ; column < this.finalTable.getColumnCount(); column++){
+                rowElements.add(this.finalTable.getTable().get(row).get(column));
+            }
+            dataList.add(rowElements);
+        }
+        this.tableView.setItems(dataList);  
+    }
+    
+    /**
+     * <b> GUI-Operation </b> <p>
+     * The user will be encouraged to allocate the metadata to the final table. <p>
+     */
+    private void allocateMetaData() {
+        
     }
     
     private void testUserDataTable() {

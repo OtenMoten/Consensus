@@ -81,6 +81,7 @@ public class FXMLController implements Initializable {
     @FXML private ListView listView;
     @FXML private Button btnImport;
     @FXML private Button btnExport;
+    @FXML private Button btnNext;
 
     /**
      * <b> Operation </b> <p>
@@ -271,19 +272,6 @@ public class FXMLController implements Initializable {
         // only for showcase
     }
     
-    private void hilfsMethode(ArrayList<String> labels, ArrayList<String> values) {
-
-        for (int i = 0; i < labels.size(); i++) {
-            ArrayList<String> list = new ArrayList<>();
-            for (int finalTableRowCount = 0; finalTableRowCount < this.finalTable.getRowCount(); finalTableRowCount++) {
-                if(finalTableRowCount == 0) {list.add(labels.get(i));}
-                else {list.add(values.get(i));}
-            } 
-            System.out.println("Listenlänge: " + list.size());
-            this.finalTable.setColumnAt(labels.get(i), list);
-        }     
-    }
-    
     /**
      * <b> GUI-Operation </b> <p>
      * The user will be encouraged to allocate the metadata to the final table. <p>
@@ -323,6 +311,7 @@ public class FXMLController implements Initializable {
                     }
                 }
                 hilfsMethode(labelsOfTextField, valuesOfTextField);
+                stage.close();
             }
         });
         
@@ -351,6 +340,26 @@ public class FXMLController implements Initializable {
     }
     
     /**
+     * <b> GUI-Operation </b> <p>
+     * Fill in the empty (non-allocated) columns with user-entered values.
+     * @param labels the headings of the non-allocated columns represented by a one-dimensional String ArrayList
+     * @param values the payload of the non-allocated columns represented by a one-dimensional String ArrayList
+     */
+    private void hilfsMethode(ArrayList<String> labels, ArrayList<String> values) {
+        this.btnNext.setDisable(true);
+        
+        for (int i = 0; i < labels.size(); i++) {
+            ArrayList<String> list = new ArrayList<>();
+            for (int finalTableRowCount = 0; finalTableRowCount < this.finalTable.getRowCount(); finalTableRowCount++) {
+                if(finalTableRowCount == 0) {list.add(labels.get(i));}
+                else {list.add(values.get(i));}
+            } 
+            this.finalTable.setColumnAt(labels.get(i), list);
+        }     
+    }
+    
+    /**
+     * <b> GUI-Operation </b> <p>
      * Fill in the VBoxes in the SplitPane with the selected headings from 'selectUserData()'. <p>
      * Furthermore, the Drag&Drop functionality are given to the displayed elements 
      * ('selected Headings' = partial Layout-object headings and the headings from the userDataTable-object).

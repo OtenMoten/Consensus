@@ -53,7 +53,7 @@
                      <effect>
                         <DropShadow blurType="TWO_PASS_BOX" />
                      </effect></Button>
-                  <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#allocateMetaData" prefHeight="25.0" prefWidth="67.0" text="Next" textAlignment="CENTER">
+                  <Button fx:id="btnNext" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#allocateMetaData" prefHeight="25.0" prefWidth="67.0" text="Next" textAlignment="CENTER">
                      <effect>
                         <DropShadow blurType="TWO_PASS_BOX" />
                      </effect>

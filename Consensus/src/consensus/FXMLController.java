@@ -23,9 +23,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -52,6 +55,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -75,6 +79,7 @@ public class FXMLController implements Initializable {
     @FXML private HBox splitPaneHBox;
     @FXML private TableView tableView;
     @FXML private ListView listView;
+    @FXML private Button btnImport;
     @FXML private Button btnExport;
 
     /**
@@ -175,7 +180,7 @@ public class FXMLController implements Initializable {
         
         selectingStage.setTitle("Selecting headings from Layout");
         selectingStage.setWidth(900);
-        selectingStage.setHeight(550);
+        selectingStage.setHeight(350);
         
         ArrayList<String> selectedHeadings = new ArrayList<>();
         
@@ -262,6 +267,21 @@ public class FXMLController implements Initializable {
         }
         selectingStage.setScene(scene);
         selectingStage.show();
+        btnImport.setDisable(true);
+        // only for showcase
+    }
+    
+    private void hilfsMethode(ArrayList<String> labels, ArrayList<String> values) {
+
+        for (int i = 0; i < labels.size(); i++) {
+            ArrayList<String> list = new ArrayList<>();
+            for (int finalTableRowCount = 0; finalTableRowCount < this.finalTable.getRowCount(); finalTableRowCount++) {
+                if(finalTableRowCount == 0) {list.add(labels.get(i));}
+                else {list.add(values.get(i));}
+            } 
+            System.out.println("Listenlänge: " + list.size());
+            this.finalTable.setColumnAt(labels.get(i), list);
+        }     
     }
     
     /**
@@ -277,14 +297,43 @@ public class FXMLController implements Initializable {
         hboxContainer.setSpacing(10);
         
         VBox vboxLeft = new VBox(); vboxLeft.setSpacing(35); vboxLeft.setAlignment(Pos.CENTER);
+        VBox vboxMid = new VBox(); vboxMid.setSpacing(25); vboxMid.setAlignment(Pos.CENTER);
         VBox vboxRight = new VBox(); vboxRight.setSpacing(25); vboxRight.setAlignment(Pos.CENTER);
         
-        hboxContainer.getChildren().addAll(vboxLeft, vboxRight);
+        
+        Button btnAccept = new Button("Accept"); btnAccept.setPrefSize(100, 50);
+        Button btnReset = new Button("Reset"); btnReset.setPrefSize(100, 50);
+        vboxRight.getChildren().addAll(btnAccept, btnReset);
+        
+        
+        btnAccept.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent action) {
+                ArrayList<String> labelsOfTextField = new ArrayList<>();
+                ArrayList<String> valuesOfTextField = new ArrayList<>();
+                for(Node children : vboxLeft.getChildren()) {
+                    if(children instanceof Label) {
+                        labelsOfTextField.add(((Label) children).getText());
+                    }
+                }
+                
+                for (Node children : vboxMid.getChildren()) {
+                    if(children instanceof TextField) {
+                        valuesOfTextField.add(((TextField) children).getText());
+                    }
+                }
+                hilfsMethode(labelsOfTextField, valuesOfTextField);
+            }
+        });
+        
+        hboxContainer.getChildren().addAll(vboxLeft, vboxMid, vboxRight);
         Scene scene = new Scene(hboxContainer);
         
         stage.setTitle("Allocate the meta data");
-        stage.setWidth(900);
+        stage.setWidth(550);
         stage.setHeight(550);
+        
+        this.globalNonSelectedHeadings.remove(7);
         
         for (String globalNonSelectedHeading : this.globalNonSelectedHeadings) {
             Label labelGlobalNonSelectedHeading = new Label(globalNonSelectedHeading);
@@ -293,7 +342,7 @@ public class FXMLController implements Initializable {
             TextField textfieldGlobalNonSelectedHeading = new TextField(globalNonSelectedHeading);
             
             vboxLeft.getChildren().add(labelGlobalNonSelectedHeading);
-            vboxRight.getChildren().add(textfieldGlobalNonSelectedHeading);
+            vboxMid.getChildren().add(textfieldGlobalNonSelectedHeading);
         }
         
         stage.setScene(scene);

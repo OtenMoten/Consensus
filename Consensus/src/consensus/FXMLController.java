@@ -311,6 +311,7 @@ public class FXMLController implements Initializable {
                     }
                 }
                 hilfsMethode(labelsOfTextField, valuesOfTextField);
+                printTableView();
                 stage.close();
             }
         });
@@ -322,7 +323,8 @@ public class FXMLController implements Initializable {
         stage.setWidth(550);
         stage.setHeight(550);
         
-        this.globalNonSelectedHeadings.remove(7);
+        // Only for showcase - need an algo
+        this.globalNonSelectedHeadings.remove(5);
         
         for (String globalNonSelectedHeading : this.globalNonSelectedHeadings) {
             Label labelGlobalNonSelectedHeading = new Label(globalNonSelectedHeading);

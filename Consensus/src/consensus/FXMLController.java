@@ -26,7 +26,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -47,6 +46,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
@@ -55,7 +55,6 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -227,15 +226,24 @@ public class FXMLController implements Initializable {
             display(selectedHeadings);
             
             selectingStage.close();
+            
         });
+        
+        // Appending metadata to the citation column in the final table
+        String citationHeading = "Literature Citation"; // replace through global mapped layout variable
+        ArrayList<String> citationList = new ArrayList<>();
+        for (int i = 1; i < this.userDataTable.getRowCount(); i++) {
+            citationList.add(this.metaDataTable.getRowAt(1).toString());
+            citationList.set(0, citationHeading);
+        }
+        this.finalTable.setColumnAt(citationHeading, citationList);
         
         final ArrayList<String> headings = this.layout.getHeadings();
         int counter = 1;
         
         for (int i = 0; i < headings.size(); i++) {
-            
+
             if(counter == 4) {counter = 1;}
-            
             final CheckBox checkBox = new CheckBox(headings.get(i));
             
             //final Tooltip tooltip = new Tooltip("$ tooltip");
@@ -245,17 +253,17 @@ public class FXMLController implements Initializable {
             
             switch(counter) {
                 case 1:
-                    vboxLeft.getChildren().add(checkBox);
+                    if(!checkBox.getText().equals(citationHeading)) {vboxLeft.getChildren().add(checkBox);} // remove the citation checkbox
                     counter++;
-                    if(i+1 == headings.size()) {vboxLeft.getChildren().add(btnAccept);}
+                    if(i+1 == headings.size()) {vboxRight.getChildren().add(btnAccept);}
                     break;
                 case 2:
-                    vboxMid.getChildren().add(checkBox);
+                    if(!checkBox.getText().equals(citationHeading)) {vboxMid.getChildren().add(checkBox);} // remove the citation checkbox
                     counter++;
-                    if(i+1 == headings.size()) {vboxMid.getChildren().add(btnAccept);}
+                    if(i+1 == headings.size()) {vboxRight.getChildren().add(btnAccept);}
                     break;
                 case 3:
-                    vboxRight.getChildren().add(checkBox);
+                    if(!checkBox.getText().equals(citationHeading)) {vboxRight.getChildren().add(checkBox);} // remove the citation checkbox
                     counter++;
                     if(i+1 == headings.size()) {vboxRight.getChildren().add(btnAccept);}
                     break;
@@ -269,7 +277,7 @@ public class FXMLController implements Initializable {
         selectingStage.setScene(scene);
         selectingStage.show();
         btnImport.setDisable(true);
-        // only for showcase
+        
     }
     
     /**
@@ -288,32 +296,23 @@ public class FXMLController implements Initializable {
         VBox vboxMid = new VBox(); vboxMid.setSpacing(25); vboxMid.setAlignment(Pos.CENTER);
         VBox vboxRight = new VBox(); vboxRight.setSpacing(25); vboxRight.setAlignment(Pos.CENTER);
         
-        
         Button btnAccept = new Button("Accept"); btnAccept.setPrefSize(100, 50);
         Button btnReset = new Button("Reset"); btnReset.setPrefSize(100, 50);
         vboxRight.getChildren().addAll(btnAccept, btnReset);
         
-        
-        btnAccept.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent action) {
-                ArrayList<String> labelsOfTextField = new ArrayList<>();
-                ArrayList<String> valuesOfTextField = new ArrayList<>();
-                for(Node children : vboxLeft.getChildren()) {
-                    if(children instanceof Label) {
-                        labelsOfTextField.add(((Label) children).getText());
-                    }
-                }
-                
-                for (Node children : vboxMid.getChildren()) {
-                    if(children instanceof TextField) {
-                        valuesOfTextField.add(((TextField) children).getText());
-                    }
-                }
-                hilfsMethode(labelsOfTextField, valuesOfTextField);
-                printTableView();
-                stage.close();
-            }
+        btnAccept.setOnAction((ActionEvent action) -> {
+            ArrayList<String> labelsOfTextField = new ArrayList<>();
+            ArrayList<String> valuesOfTextField = new ArrayList<>();
+            vboxLeft.getChildren().stream().filter((children) -> (children instanceof Label)).forEach((Node children) -> {
+                labelsOfTextField.add(((Label) children).getText());
+            });
+            
+            vboxMid.getChildren().stream().filter((children) -> (children instanceof TextField)).forEach((Node children) -> {
+                valuesOfTextField.add(((TextField) children).getText());
+            });
+            fillSpaces(labelsOfTextField, valuesOfTextField);
+            printTableView();
+            stage.close();
         });
         
         hboxContainer.getChildren().addAll(vboxLeft, vboxMid, vboxRight);
@@ -323,22 +322,21 @@ public class FXMLController implements Initializable {
         stage.setWidth(550);
         stage.setHeight(550);
         
-        // Only for showcase - need an algo
-        this.globalNonSelectedHeadings.remove(5);
-        
-        for (String globalNonSelectedHeading : this.globalNonSelectedHeadings) {
+        this.globalNonSelectedHeadings.stream().forEach((String globalNonSelectedHeading) -> {
+            String textString = "- Enter value here -";
             Label labelGlobalNonSelectedHeading = new Label(globalNonSelectedHeading);
-            labelGlobalNonSelectedHeading.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 12));
-            
-            TextField textfieldGlobalNonSelectedHeading = new TextField(globalNonSelectedHeading);
-            
+            labelGlobalNonSelectedHeading.setFont(Font.font("Verdana", FontWeight.THIN, 12));
+            TextField textfieldGlobalNonSelectedHeading = new TextField(textString);
+            textfieldGlobalNonSelectedHeading.setOnMouseClicked((MouseEvent event) -> {
+                if(textString.equals(textfieldGlobalNonSelectedHeading.getText())) {
+                    textfieldGlobalNonSelectedHeading.setText("");
+                }
+            });  
             vboxLeft.getChildren().add(labelGlobalNonSelectedHeading);
             vboxMid.getChildren().add(textfieldGlobalNonSelectedHeading);
-        }
-        
+        });
         stage.setScene(scene);
         stage.show();
-        this.btnExport.setDisable(false);
     }
     
     /**
@@ -347,7 +345,8 @@ public class FXMLController implements Initializable {
      * @param labels the headings of the non-allocated columns represented by a one-dimensional String ArrayList
      * @param values the payload of the non-allocated columns represented by a one-dimensional String ArrayList
      */
-    private void hilfsMethode(ArrayList<String> labels, ArrayList<String> values) {
+    private void fillSpaces(ArrayList<String> labels, ArrayList<String> values) {
+        this.btnExport.setDisable(false);
         this.btnNext.setDisable(true);
         
         for (int i = 0; i < labels.size(); i++) {
@@ -368,14 +367,6 @@ public class FXMLController implements Initializable {
      * @param selectedHeadings represented by a one-dimensional String ArrayList
      */
     private void display(ArrayList<String> selectedHeadings) {
-        this.globalSelectedHeadings = selectedHeadings;
-        // only for show-case
-        // add manually the metadata
-        ArrayList<String> dummy = new ArrayList<>();
-        for (int row = 0; row < this.userDataTable.getRowCount(); row++) {
-            dummy.add("Boulard et al. 2018");
-        } dummy.set(0, "Literature Citation");
-        this.finalTable.setColumnAt(this.finalTable.getColumnCount() - 1, dummy);
         
         int columnCount = selectedHeadings.size();
         int counter = 0;

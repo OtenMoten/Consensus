@@ -45,8 +45,6 @@ public class Layout {
      * Set up the number of columns. <p>
      *
      * @param layout represented by a one-dimensional String ArrayList
-     * @param citationColumn represented by a String
-     * @param checkBoxes represented by a one-dimensional String ArrayList
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index > size())
      * @throws NullPointerException if the specified collection is null
      * @throws ClassCastException if the class of an element of this list is incompatible with the specified collection
@@ -56,7 +54,7 @@ public class Layout {
      */
     public Layout(ArrayList<ArrayList<String>> layout) {
         this.headings  = layout.get(0);
-        this.columnCount = layout.size();
+        this.columnCount = layout.get(0).size();
         this.citationColumn = layout.get(1).get(0);
         this.checkBoxes = layout.get(2);
     }

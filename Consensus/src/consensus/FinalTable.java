@@ -213,7 +213,6 @@ public class FinalTable {
         for (int i = 0; i < this.columnCount; i++) {
             if(heading.equals(this.headings.get(i))) {
                 column = i;
-                System.out.println(column);
             }
             
         }

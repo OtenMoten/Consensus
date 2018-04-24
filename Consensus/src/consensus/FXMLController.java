@@ -157,7 +157,7 @@ public class FXMLController implements Initializable {
         alert.setContentText(finaTablePath);
         alert.show();     
     }
-
+    
     /**
      * <b> Operation </b> <p>
      * Creating a GUI to select which layout headings should be displayed as Drag&Drop element. <p>
@@ -220,21 +220,18 @@ public class FXMLController implements Initializable {
                     } else {this.globalNonSelectedHeadings.add(((CheckBox) vboxRight.getChildren().get(i)).getText());}
                 }
             }
-            
             //if the Accept-Button is clicked then the selected headings will be displayed in the main GUI
             //next step is to apply the headings from the layout to the headings from the userdata table
             display(selectedHeadings);
-            
             selectingStage.close();
-            
         });
         
         // Appending metadata to the citation column in the final table
-        String citationHeading = "Literature Citation"; // replace through global mapped layout variable
+        String citationHeading = this.layout.getCitationColumn(); // replace through global mapped layout variable
         ArrayList<String> citationList = new ArrayList<>();
+        citationList.add(citationHeading);
         for (int i = 1; i < this.userDataTable.getRowCount(); i++) {
             citationList.add(this.metaDataTable.getRowAt(1).toString());
-            citationList.set(0, citationHeading);
         }
         this.finalTable.setColumnAt(citationHeading, citationList);
         
@@ -277,7 +274,6 @@ public class FXMLController implements Initializable {
         selectingStage.setScene(scene);
         selectingStage.show();
         btnImport.setDisable(true);
-        
     }
     
     /**
@@ -731,9 +727,6 @@ public class FXMLController implements Initializable {
         loadListView();
 
         System.out.println("initialize done :-)");
-        
-        System.out.println(this.layout.getCheckboxes());
-        System.out.println(this.layout.getCitationColumn());
     }
     
 }

@@ -26,13 +26,27 @@ public class Layout {
      * @since Release (1st July 2018)
      */
     private final int columnCount;
-    
+    /**
+     * The name of the column where the generated metadata should be.
+     * @since Release (1st July 2018)
+     */
+    private final String citationColumn;
+    /**
+     * A list of specified headings from the layout which are criteria for the selection of empty columns while the allocation. <p>
+     * If these headings are no filled with userdata in the final table then the user will be encouraged to select it from ceckboxes. <p>
+     * This list will be the source for which .CSV-files will be selected for the checkboxes content.
+     * @since Release (1st July 2018)
+     */
+    private final ArrayList<String> checkBoxes;
+
     /**
      * <b>Constructor</b> <p>
-     * > Set up the layout as a one-dimensional ArrayList. <p>
-     * > Set up the number of columns. <p>
+     * Set up the layout as a one-dimensional ArrayList. <p>
+     * Set up the number of columns. <p>
      *
-     * @param layout one-dimensional String ArrayList
+     * @param layout represented by a one-dimensional String ArrayList
+     * @param citationColumn represented by a String
+     * @param checkBoxes represented by a one-dimensional String ArrayList
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index > size())
      * @throws NullPointerException if the specified collection is null
      * @throws ClassCastException if the class of an element of this list is incompatible with the specified collection
@@ -40,9 +54,11 @@ public class Layout {
      * @throws ConcurrentModificationException if the list is structurally modified at any time after the iterator is created, in any way except through the iterator's own remove or add methods
      * @since Release (1st July 2018)
      */
-    public Layout(ArrayList<String> layout) {
-        this.headings  = layout;
+    public Layout(ArrayList<ArrayList<String>> layout) {
+        this.headings  = layout.get(0);
         this.columnCount = layout.size();
+        this.citationColumn = layout.get(1).get(0);
+        this.checkBoxes = layout.get(2);
     }
 
     /**
@@ -53,6 +69,23 @@ public class Layout {
      */
     public ArrayList<String> getHeadings() {
         return this.headings;
+    }
+    /**
+     * <b>Getter</b> <p>
+     * @since Release (1st July 2018)
+     * @return The heading of the citation column from the layout
+     */
+    public String getCitationColumn() {
+        return this.citationColumn;
+    }
+    /**
+     * <b>Getter</b> <p>
+     * The native order was not changed. It's a final value.
+     * @since Release (1st July 2018)
+     * @return The headings from the layout which should be displayed as a checkbox.
+     */
+    public ArrayList<String> getCheckboxes() {
+        return this.checkBoxes;
     }
     /**
      * <b>Getter</b> <p>

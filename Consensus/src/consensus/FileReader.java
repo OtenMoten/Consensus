@@ -337,25 +337,35 @@ public class FileReader {
         return metaDataTable;
     }
     /**
-     * The seeperator between each heading in the CSV file is configurable
+     * The seperator between each heading in the CSV file is configurable. <p>
      * @param csvSplitBy represented by a String
-     * @return The headings of the layout as a one-dimensional String ArrayList
+     * @return The layout and it's attributes as a two-dimensional String ArrayList. 0 = headings, 1 = citation column, 2 = checkboxes. 
      */
-    public ArrayList<String> readInLayout (String csvSplitBy) {
+    public ArrayList<ArrayList<String>> readInLayout (String csvSplitBy) {
         BufferedReader bufferedReader;
-        String textLine;
+        ArrayList<String> headings = new ArrayList<>(); // first row in the .CSV-files are read as a whole String
+        ArrayList<String> citationColumn = new ArrayList<>();
+        ArrayList<String> checkboxes = new ArrayList<>();
         String splitter = csvSplitBy;
-        ArrayList<String> headings = new ArrayList<>();
+        ArrayList<ArrayList<String>> layout = new ArrayList<>();
         
         try {
             bufferedReader = new BufferedReader(new java.io.FileReader(this.pathLayout));
-            textLine = bufferedReader.readLine();
-            headings = new ArrayList<>(Arrays.asList(textLine.split(splitter)));
-        } catch (FileNotFoundException ex) {
+            Iterator<String> iterator = bufferedReader.lines().iterator();
+            // add headings
+            headings.addAll(Arrays.asList(iterator.next().split(splitter)));
+            layout.add(headings);
+            // add citation column
+            citationColumn.add(iterator.next());
+            layout.add(citationColumn);
+            // add checkboxes
+            checkboxes.addAll(Arrays.asList(iterator.next().split(splitter)));
+            layout.add(checkboxes);
+        } 
+        catch (FileNotFoundException ex) {
             Logger.getLogger(FileReader.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException e) {
-            Logger.getLogger(FileReader.class.getName()).log(Level.SEVERE, null, e);
         }
-        return headings;
+        return layout;
     }
+        
 }   

@@ -731,6 +731,9 @@ public class FXMLController implements Initializable {
         loadListView();
 
         System.out.println("initialize done :-)");
+        
+        System.out.println(this.layout.getCheckboxes());
+        System.out.println(this.layout.getCitationColumn());
     }
     
 }

@@ -20,7 +20,6 @@ public class Consensus extends Application {
     @Override
     public void start(Stage rootStage) throws Exception {
         Parent rootParent = FXMLLoader.load(getClass().getResource("GUI.fxml"));
-        
         Scene rootScene = new Scene(rootParent);
         
         rootStage.setScene(rootScene);

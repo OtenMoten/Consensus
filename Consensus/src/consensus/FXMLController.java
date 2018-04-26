@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -25,19 +26,23 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -74,6 +79,7 @@ public class FXMLController implements Initializable {
     private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
     ArrayList<String> globalSelectedHeadings = new ArrayList<>();
     ArrayList<String> globalNonSelectedHeadings = new ArrayList<>();
+    private String currentPDF = ""; private String currentXML = ""; private String currentLayout = "";
     @FXML private VBox splitPaneVBoxOne; @FXML private VBox splitPaneVBoxTwo; @FXML private VBox splitPaneVBoxThree; @FXML private VBox splitPaneVBoxFour; @FXML private VBox splitPaneVBoxFife;
     @FXML private HBox splitPaneHBox;
     @FXML private TableView tableView;
@@ -147,15 +153,28 @@ public class FXMLController implements Initializable {
         try ( //Write the workbook in file system
             FileOutputStream out = new FileOutputStream(new File(finaTablePath))) {
             finalWorkbook.write(out);
+            alert.setTitle("Information");
+        alert.setHeaderText("Export finished");
+        alert.setContentText(finaTablePath);
+        alert.show();  
+        
+        // Put the while-loop in a new task because else the GUI is not touchable durring the while-loop
+        Runnable task = () -> {
+                try {
+                    while(alert.isShowing()) {
+                        Thread.sleep(100);
+                    } Platform.exit(); System.exit(0);
+                        
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }; new Thread(task).start();
+
         } catch (IOException ex) {
             Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Maybe your Excel file is open ..");
             System.out.println("Maybe your Excel file is open ..");
         }
-        alert.setTitle("Information");
-        alert.setHeaderText("Export finished");
-        alert.setContentText(finaTablePath);
-        alert.show();     
     }
     
     /**
@@ -166,6 +185,15 @@ public class FXMLController implements Initializable {
      */
     @FXML // mapped to 'Import'-button in the main GUI
     private void selectLayoutHeadings() {
+        this.currentLayout = "\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\" + this.listView.getSelectionModel().getSelectedItem();
+        this.listView.setDisable(true);
+        this.fileReader = new FileReader(this.currentPDF, this.currentXML, this.currentLayout);
+        this.userDataTable = new UserDataTable(this.fileReader.readInUserDataTableHSSF());
+        this.metaDataTable = new MetaDataTable(this.fileReader.readInMetaDataTable());
+        this.layout = new Layout(this.fileReader.readInLayout(";"));
+        (this.finalTable = new FinalTable()).setHeadings(this.layout.getHeadings());
+         this.finalTable.addRow();
+         
         Stage selectingStage = new Stage();
         selectingStage.initModality(Modality.APPLICATION_MODAL);
         
@@ -567,9 +595,10 @@ public class FXMLController implements Initializable {
         ObservableList<String> elementList = FXCollections.observableArrayList();
         
         try {
-            Files.walk(Paths.get("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\")).filter(Files::isRegularFile).forEach(filePath ->{
+            Files.walk(Paths.get("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\")).filter(Files::isRegularFile).forEach(filePath -> {
                 String name = "\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\" + filePath.getFileName().toString();
-                if(name.startsWith("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\LO")) {
+                System.out.println(name);
+                if(name.startsWith("LO")) {
                     elementList.add(filePath.getFileName().toString());
                 }
             });
@@ -581,7 +610,7 @@ public class FXMLController implements Initializable {
         listView.setItems(elementList);
         listView.refresh();
     }
-    
+
     private void testUserDataTable() {
         System.out.println("UserDataTable Class Test");
         
@@ -717,16 +746,40 @@ public class FXMLController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.fileReader = new FileReader("C:\\Test_Extraktor\\Internal\\Boulard_et_al._2018__polare_AM.xls", "C:\\Test_Extraktor\\Internal\\metadata.xml", "\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\LO_Arne.csv");
-        this.userDataTable = new UserDataTable(this.fileReader.readInUserDataTableHSSF());
-        this.metaDataTable = new MetaDataTable(this.fileReader.readInMetaDataTable());
-        this.layout = new Layout(this.fileReader.readInLayout(";"));
-        (this.finalTable = new FinalTable()).setHeadings(this.layout.getHeadings());
-        this.finalTable.addRow();
+        ObservableList<String> elementList = FXCollections.observableArrayList();
+        try {
+            Files.walk(Paths.get("C:\\Test_Extraktor\\Internal\\")).filter(Files::isRegularFile).forEach(filePath -> {
+                if(filePath.getFileName().toString().endsWith(".xls")) {
+                    this.currentPDF = "C:\\Test_Extraktor\\Internal\\" + filePath.getFileName().toString();
+                    System.out.println(filePath.getFileName().toString());
+                }
+                if(filePath.getFileName().toString().endsWith(".xml")) {
+                    this.currentXML = "C:\\Test_Extraktor\\Internal\\" + filePath.getFileName().toString();
+                    System.out.println(filePath.getFileName().toString());
+                }
+            });
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error in 'initialize()'");
+            System.err.println("Error in 'initialize()'");
+        }
         
-        loadListView();
-
-        System.out.println("initialize done :-)");
+        try {
+            Files.walk(Paths.get("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\")).filter(Files::isRegularFile).forEach(filePath -> {
+                String name = "\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\" + filePath.getFileName().toString();
+                if(filePath.getFileName().toString().startsWith("Layout_")) {
+                    elementList.add(filePath.getFileName().toString());
+                }
+                
+            });
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error in 'loadListView()'");
+            System.err.println("Error in 'loadListView()'");
+        }
+        
+        this.listView.setItems(elementList);
+        this.listView.refresh();
     }
     
 }

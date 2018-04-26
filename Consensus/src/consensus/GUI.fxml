@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="1200.0" maxWidth="1920.0" minHeight="768.0" minWidth="800.0" prefHeight="1200.0" prefWidth="1920.0" style="-fx-background-image: url(&quot;consensus/wallpaper.jpg&quot;);" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="consensus.FXMLController">
+<BorderPane maxHeight="1080.0" maxWidth="1600.0" minHeight="768.0" minWidth="800.0" prefHeight="1080.0" prefWidth="1600.0" style="-fx-background-image: url(&quot;consensus/wallpaper.jpg&quot;);" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="consensus.FXMLController">
    <center>
       <BorderPane maxHeight="1000.0" maxWidth="1400.0" minHeight="400.0" minWidth="300.0" prefHeight="1000.0" prefWidth="1400.0">
          <center>

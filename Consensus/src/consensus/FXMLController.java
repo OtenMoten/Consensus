@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -746,6 +747,10 @@ public class FXMLController implements Initializable {
         System.out.println("FinalTable Class Test");
     }
     
+    private void disableImportButton() {
+        this.btnImport.setDisable(false);
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<String> elementList = FXCollections.observableArrayList();
@@ -782,6 +787,13 @@ public class FXMLController implements Initializable {
         
         this.listView.setItems(elementList);
         this.listView.refresh();
+        
+        this.listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                disableImportButton();
+            }
+        });
     }
     
 }

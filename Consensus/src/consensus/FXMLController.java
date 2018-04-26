@@ -185,6 +185,8 @@ public class FXMLController implements Initializable {
      */
     @FXML // mapped to 'Import'-button in the main GUI
     private void selectLayoutHeadings() {
+        this.btnNext.setDisable(false);
+        
         this.currentLayout = "\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\" + this.listView.getSelectionModel().getSelectedItem();
         this.listView.setDisable(true);
         this.fileReader = new FileReader(this.currentPDF, this.currentXML, this.currentLayout);

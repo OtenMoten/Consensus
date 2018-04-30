@@ -25,34 +25,29 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
@@ -337,6 +332,9 @@ public class FXMLController implements Initializable {
             vboxMid.getChildren().stream().filter((children) -> (children instanceof TextField)).forEach((Node children) -> {
                 valuesOfTextField.add(((TextField) children).getText());
             });
+            vboxMid.getChildren().stream().filter((children) -> (children instanceof ComboBox)).forEach((Node children) -> {
+                valuesOfTextField.add(((ComboBox) children).getSelectionModel().getSelectedItem().toString());
+            });
             fillSpaces(labelsOfTextField, valuesOfTextField);
             printTableView();
             stage.close();
@@ -353,14 +351,33 @@ public class FXMLController implements Initializable {
             String textString = "- Enter value here -";
             Label labelGlobalNonSelectedHeading = new Label(globalNonSelectedHeading);
             labelGlobalNonSelectedHeading.setFont(Font.font("Verdana", FontWeight.THIN, 12));
-            TextField textfieldGlobalNonSelectedHeading = new TextField(textString);
+            
+            final TextField textfieldGlobalNonSelectedHeading = new TextField();
+            ObservableList<String> options = FXCollections.observableArrayList();
+            final ComboBox comboBox = new ComboBox(options);
+            Boolean trigger = false; // default is false => TextField
+                    
+            for (String comboboxString : this.layout.getComboBoxes()) {
+                if(comboboxString.equals(globalNonSelectedHeading)) {
+                    options.addAll(this.layout.getComboBoxPayload(comboboxString)); // add files to the ComboBox
+                    trigger = true;
+                } else {
+                    textfieldGlobalNonSelectedHeading.setText(globalNonSelectedHeading);
+                }
+            }
+            
             textfieldGlobalNonSelectedHeading.setOnMouseClicked((MouseEvent event) -> {
                 if(textString.equals(textfieldGlobalNonSelectedHeading.getText())) {
                     textfieldGlobalNonSelectedHeading.setText("");
                 }
-            });  
+            });
+            
+            if(trigger == true) { // if true => checkbox will added
+                vboxMid.getChildren().add(comboBox);
+            } else { // if false =>
+                vboxMid.getChildren().add(textfieldGlobalNonSelectedHeading);
+            }
             vboxLeft.getChildren().add(labelGlobalNonSelectedHeading);
-            vboxMid.getChildren().add(textfieldGlobalNonSelectedHeading);
         });
         stage.setScene(scene);
         stage.show();

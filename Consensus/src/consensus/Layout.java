@@ -5,8 +5,17 @@
  */
 package consensus;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,7 +46,7 @@ public class Layout {
      * This list will be the source for which .CSV-files will be selected for the checkboxes content.
      * @since Release (1st July 2018)
      */
-    private final ArrayList<String> checkBoxes;
+    private final ArrayList<String> comboBoxes;
 
     /**
      * <b>Constructor</b> <p>
@@ -56,7 +65,7 @@ public class Layout {
         this.headings  = layout.get(0);
         this.columnCount = layout.get(0).size();
         this.citationColumn = layout.get(1).get(0);
-        this.checkBoxes = layout.get(2);
+        this.comboBoxes = layout.get(2);
     }
 
     /**
@@ -82,8 +91,8 @@ public class Layout {
      * @since Release (1st July 2018)
      * @return The headings from the layout which should be displayed as a checkbox.
      */
-    public ArrayList<String> getCheckboxes() {
-        return this.checkBoxes;
+    public ArrayList<String> getComboBoxes() {
+        return this.comboBoxes;
     }
     /**
      * <b>Getter</b> <p>
@@ -137,6 +146,28 @@ public class Layout {
             }
         } else {return null;}
         return listofHeadings;
+    }
+    /**
+     * <b>Getter</b> <p>
+     * @param comboBoxString represented by a String
+     * @since Release (1st July 2018)
+     * @return A list in form of a String ArrayList with the payload of the .CSV-files
+     */
+    public ArrayList<String> getComboBoxPayload(String comboBoxString) {
+        BufferedReader bufferedReader;
+        String splitter = ";";
+        ArrayList<String> comboBoxPayload = new ArrayList<>();
+  
+        try {
+            bufferedReader = new BufferedReader(new java.io.FileReader("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\checkboxes\\" + comboBoxString + ".csv"));
+            Iterator<String> iterator = bufferedReader.lines().iterator();
+            comboBoxPayload.addAll(Arrays.asList(iterator.next().split(splitter)));
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Layout.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return comboBoxPayload;
     }
 
 }

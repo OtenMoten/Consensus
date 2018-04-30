@@ -613,7 +613,15 @@ public class FXMLController implements Initializable {
         listView.setItems(elementList);
         listView.refresh();
     }
-
+    
+    /**
+     * <b> GUI-Operation </b> <p>
+     * This function disable the 'Import'-button in the main GUI. <p>
+     */
+    private void disableImportButton() {
+        this.btnImport.setDisable(false);
+    }
+    
     private void testUserDataTable() {
         System.out.println("UserDataTable Class Test");
         
@@ -746,11 +754,7 @@ public class FXMLController implements Initializable {
     private void testFinalTable() {
         System.out.println("FinalTable Class Test");
     }
-    
-    private void disableImportButton() {
-        this.btnImport.setDisable(false);
-    }
-    
+ 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<String> elementList = FXCollections.observableArrayList();

@@ -362,12 +362,13 @@ public class FXMLController implements Initializable {
                     options.addAll(this.layout.getComboBoxPayload(comboboxString)); // add files to the ComboBox
                     trigger = true;
                 } else {
-                    textfieldGlobalNonSelectedHeading.setText(globalNonSelectedHeading);
+                    textfieldGlobalNonSelectedHeading.setText(textString);
                 }
             }
             
+            // Remove the placeholder-text in the TextField when clicked in
             textfieldGlobalNonSelectedHeading.setOnMouseClicked((MouseEvent event) -> {
-                if(textString.equals(textfieldGlobalNonSelectedHeading.getText())) {
+                if(textString.equals(textString)) {
                     textfieldGlobalNonSelectedHeading.setText("");
                 }
             });

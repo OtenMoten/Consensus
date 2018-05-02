@@ -429,7 +429,7 @@ public class FinalTable {
     public void addColumn(int columnID) {
         if(columnID >= 0 && columnID <= Integer.MAX_VALUE) {
             this.table.get(0).add(columnID, "");
-            this.headings.add(columnID, ""); 
+            this.headings = this.table.get(0);
             for (int row = 1; row < this.rowCount; row++) {
                 this.table.get(row).add(columnID, "");
                 this.payload.get(row - 1).add(columnID, "");
@@ -448,22 +448,18 @@ public class FinalTable {
      * @see https://docs.oracle.com/javase/tutorial/essential/regex/quant.html
      */
     public void addColumn(int columnID, String heading) {
-        if(heading.matches("[a-zA-Z]+")) { // '+' is a 'reclutant' quantifier and '++' would be 'possesive' quantifier 
             if(columnID >= 0 && columnID <= Integer.MAX_VALUE) {
                 this.table.get(0).add(columnID, heading);
-                this.headings.add(columnID, heading); 
+                this.headings = this.table.get(0);
                 for (int row = 1; row < this.rowCount; row++) {
                     this.table.get(row).add(columnID, "");
                     this.payload.get(row - 1).add(columnID, "");
-                } this.setColumnCount();
+                } this.setColumnCount();  
             } else {
                 System.err.println("'columnID' must be greater or equal than '0'.");
                 System.out.println("'columnID' must be greater or equal than '0'.");
             }
-        } else {
-            System.err.println("'heading' must be NOT empty.");
-            System.out.println("'heading' must be NOT empty.");
-        }
+        
     }
     /**
      * <b>Column Operation</b> <p>

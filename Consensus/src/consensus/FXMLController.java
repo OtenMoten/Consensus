@@ -91,19 +91,8 @@ public class FXMLController implements Initializable {
      */
     @FXML // mapped to "Export"-button in the main GUI
     private void printFinalTable() {
-        System.out.println("Actual userdata table: ");
-        for (int row = 0; row < this.userDataTable.getRowCount(); row++) {
-            for (int column = 0; column < this.userDataTable.getColumnCount(); column++) {
-                System.out.print(this.userDataTable.getTable().get(row).get(column) + " \t ");
-            } System.out.println();
-        }
-        
-        System.out.println("Actual final table: ");
-        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
-            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
-                System.out.print(this.finalTable.getTable().get(row).get(column) + " \t ");
-            } System.out.println();
-        }
+
+        separateGreaterAndLess();
         
         String finaTablePath = outputFileDialog();
        
@@ -119,7 +108,6 @@ public class FXMLController implements Initializable {
         
         //read out the finalTable-object and put each row into the map
         for (int row = 0; row < this.finalTable.getRowCount(); row++) {
-            
             //'tmpArray' needs for every row a new instance
             //each key in 'empinfo' holds different instances of tmpArray
             //because else every key would have the same value in 'tmpArray'
@@ -303,6 +291,39 @@ public class FXMLController implements Initializable {
     }
     
     /**
+     * <b> Operation </b> <p>
+     * Separates '<' and '>'. <p>
+     * Put it in a new column beside.
+     * @since Release (1st July 2018)
+     */
+    private void separateGreaterAndLess() {
+        ArrayList<ArrayList<String>> copyOfFinalTable = this.finalTable.getTable();
+        int iSaveColumn = -1;
+        boolean greater = false;
+        boolean less = false;
+
+        for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+            for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
+                if(copyOfFinalTable.get(row).get(column).matches("<(.*)") || copyOfFinalTable.get(row).get(column).matches(">(.*)")) {
+                    iSaveColumn = column;
+                    break;
+                }
+            }
+            if(iSaveColumn != -1) {break;}
+        } this.finalTable.addColumn(iSaveColumn, "Test");
+        
+        if(iSaveColumn != -1) {
+            for (int row = 0; row < this.finalTable.getRowCount(); row++) {
+                if(copyOfFinalTable.get(row).get(iSaveColumn).matches("<.*")) {
+                    if(copyOfFinalTable.get(row).get(iSaveColumn).matches(">.*")) {
+                        this.finalTable.setElementAt(row, iSaveColumn, "<");
+                    } else {this.finalTable.setElementAt(row, iSaveColumn, ">");}
+                } 
+            }
+        }
+    }
+    
+    /**
      * <b> GUI-Operation </b> <p>
      * The user will be encouraged to allocate the metadata to the final table. <p>
      */
@@ -368,7 +389,7 @@ public class FXMLController implements Initializable {
             
             // Remove the placeholder-text in the TextField when clicked in
             textfieldGlobalNonSelectedHeading.setOnMouseClicked((MouseEvent event) -> {
-                if(textString.equals(textString)) {
+                if(textfieldGlobalNonSelectedHeading.getText().equals(textString)) {
                     textfieldGlobalNonSelectedHeading.setText("");
                 }
             });
@@ -639,7 +660,7 @@ public class FXMLController implements Initializable {
     private void disableImportButton() {
         this.btnImport.setDisable(false);
     }
-    
+
     private void testUserDataTable() {
         System.out.println("UserDataTable Class Test");
         

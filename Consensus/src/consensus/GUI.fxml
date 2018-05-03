@@ -35,7 +35,7 @@
             </SplitPane>
          </center>
          <bottom>
-            <TableView fx:id="tableView" focusTraversable="false" maxHeight="500.0" minHeight="100.0" minWidth="100.0" prefHeight="454.0" prefWidth="1400.0" BorderPane.alignment="CENTER" />
+            <TableView fx:id="tableView" editable="true" focusTraversable="false" maxHeight="500.0" minHeight="100.0" minWidth="100.0" prefHeight="454.0" prefWidth="1400.0" BorderPane.alignment="CENTER" />
          </bottom>
          <right>
             <ListView fx:id="listView" editable="true" focusTraversable="false" minHeight="343.0" minWidth="153.0" prefHeight="343.0" prefWidth="153.0" BorderPane.alignment="CENTER">

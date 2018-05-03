@@ -314,11 +314,8 @@ public class FXMLController implements Initializable {
         
         if(iSaveColumn != -1) {
             for (int row = 0; row < this.finalTable.getRowCount(); row++) {
-                if(copyOfFinalTable.get(row).get(iSaveColumn).matches("<.*")) {
-                    if(copyOfFinalTable.get(row).get(iSaveColumn).matches(">.*")) {
-                        this.finalTable.setElementAt(row, iSaveColumn, "<");
-                    } else {this.finalTable.setElementAt(row, iSaveColumn, ">");}
-                } 
+                if(copyOfFinalTable.get(row).get(iSaveColumn).matches("<\\d+\\.\\d+")) {this.finalTable.setElementAt(row, iSaveColumn, "<");}
+                if(copyOfFinalTable.get(row).get(iSaveColumn).matches("<\\d+\\.\\d+")) {this.finalTable.setElementAt(row, iSaveColumn, ">");}
             }
         }
     }

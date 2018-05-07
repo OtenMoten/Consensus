@@ -304,18 +304,26 @@ public class FXMLController implements Initializable {
 
         for (int row = 0; row < this.finalTable.getRowCount(); row++) {
             for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
-                if(copyOfFinalTable.get(row).get(column).matches("<(.*)") || copyOfFinalTable.get(row).get(column).matches(">(.*)")) {
+                if(copyOfFinalTable.get(row).get(column).contains("<") || copyOfFinalTable.get(row).get(column).contains(">")) {
                     iSaveColumn = column;
                     break;
                 }
             }
             if(iSaveColumn != -1) {break;}
-        } this.finalTable.addColumn(iSaveColumn, "Test");
+        } this.finalTable.addColumn(iSaveColumn, "PLACEHOLDER");
         
         if(iSaveColumn != -1) {
             for (int row = 0; row < this.finalTable.getRowCount(); row++) {
-                if(copyOfFinalTable.get(row).get(iSaveColumn).matches("<\\d+\\.\\d+")) {this.finalTable.setElementAt(row, iSaveColumn, "<");}
-                if(copyOfFinalTable.get(row).get(iSaveColumn).matches("<\\d+\\.\\d+")) {this.finalTable.setElementAt(row, iSaveColumn, ">");}
+                if(copyOfFinalTable.get(row).get(iSaveColumn + 1).contains("<")) {
+                    if(copyOfFinalTable.get(row).get(iSaveColumn + 1).contains(">")) {
+                        this.finalTable.setElementAt(row, iSaveColumn, ">");
+                        this.finalTable.setElementAt(row, iSaveColumn + 1, copyOfFinalTable.get(row).get(iSaveColumn + 1).replace(">", ""));
+                    }
+                    this.finalTable.setElementAt(row, iSaveColumn, "<");
+                    this.finalTable.setElementAt(row, iSaveColumn + 1, copyOfFinalTable.get(row).get(iSaveColumn + 1).replace("<", ""));
+                } else {
+                    if(row > 0) {this.finalTable.setElementAt(row, iSaveColumn, "=");}
+                }
             }
         }
     }

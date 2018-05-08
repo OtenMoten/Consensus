@@ -76,6 +76,7 @@ public class FXMLController implements Initializable {
     ArrayList<String> globalSelectedHeadings = new ArrayList<>();
     ArrayList<String> globalNonSelectedHeadings = new ArrayList<>();
     private String currentPDF = ""; private String currentXML = ""; private String currentLayout = "";
+    private String pathInternalFolder; private String pathLayoutFolder;
     @FXML private VBox splitPaneVBoxOne; @FXML private VBox splitPaneVBoxTwo; @FXML private VBox splitPaneVBoxThree; @FXML private VBox splitPaneVBoxFour; @FXML private VBox splitPaneVBoxFife;
     @FXML private HBox splitPaneHBox;
     @FXML private TableView tableView;
@@ -83,6 +84,7 @@ public class FXMLController implements Initializable {
     @FXML private Button btnImport;
     @FXML private Button btnExport;
     @FXML private Button btnNext;
+    @FXML private Label testLabel;
 
     /**
      * <b> Operation </b> <p>
@@ -138,9 +140,9 @@ public class FXMLController implements Initializable {
             FileOutputStream out = new FileOutputStream(new File(finaTablePath))) {
             finalWorkbook.write(out);
             alert.setTitle("Information");
-        alert.setHeaderText("Export finished");
-        alert.setContentText(finaTablePath);
-        alert.show();  
+            alert.setHeaderText("Export finished");
+            alert.setContentText(finaTablePath);
+            alert.show();  
         
         // Put the while-loop in a new task because else the GUI is not touchable durring the while-loop
         Runnable task = () -> {
@@ -171,7 +173,7 @@ public class FXMLController implements Initializable {
     private void selectLayoutHeadings() {
         this.btnNext.setDisable(false);
         
-        this.currentLayout = "\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\" + this.listView.getSelectionModel().getSelectedItem();
+        this.currentLayout = this.pathLayoutFolder + this.listView.getSelectionModel().getSelectedItem();
         this.listView.setDisable(true);
         this.fileReader = new FileReader(this.currentPDF, this.currentXML, this.currentLayout);
         this.userDataTable = new UserDataTable(this.fileReader.readInUserDataTableHSSF());
@@ -642,8 +644,8 @@ public class FXMLController implements Initializable {
         ObservableList<String> elementList = FXCollections.observableArrayList();
         
         try {
-            Files.walk(Paths.get("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\")).filter(Files::isRegularFile).forEach(filePath -> {
-                String name = "\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\" + filePath.getFileName().toString();
+            Files.walk(Paths.get(this.pathLayoutFolder)).filter(Files::isRegularFile).forEach(filePath -> {
+                String name = this.pathLayoutFolder + filePath.getFileName().toString();
                 System.out.println(name);
                 if(name.startsWith("LO")) {
                     elementList.add(filePath.getFileName().toString());
@@ -799,17 +801,20 @@ public class FXMLController implements Initializable {
         System.out.println("FinalTable Class Test");
     }
  
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(String pathLayoutFolder, String pathInternalFolder) {
+        this.pathInternalFolder = pathInternalFolder;
+        this.pathLayoutFolder = pathLayoutFolder;
+
         ObservableList<String> elementList = FXCollections.observableArrayList();
         try {
-            Files.walk(Paths.get("C:\\Test_Extraktor\\Internal\\")).filter(Files::isRegularFile).forEach(filePath -> {
-                if(filePath.getFileName().toString().endsWith(".xls")) {
-                    this.currentPDF = "C:\\Test_Extraktor\\Internal\\" + filePath.getFileName().toString();
+            
+            Files.walk(Paths.get(this.pathInternalFolder)).filter(Files::isRegularFile).forEach(filePath -> {
+                if(filePath.getFileName().toString().endsWith(".xls")) { // Only one file with '.xls' ending should be in the internal folder.
+                    this.currentPDF = this.pathInternalFolder + filePath.getFileName().toString();
                     System.out.println(filePath.getFileName().toString());
                 }
-                if(filePath.getFileName().toString().endsWith(".xml")) {
-                    this.currentXML = "C:\\Test_Extraktor\\Internal\\" + filePath.getFileName().toString();
+                if(filePath.getFileName().toString().endsWith(".xml")) { // Only one file with '.xml' ending should be in the internal folder.
+                    this.currentXML = this.pathInternalFolder + filePath.getFileName().toString();
                     System.out.println(filePath.getFileName().toString());
                 }
             });
@@ -820,8 +825,8 @@ public class FXMLController implements Initializable {
         }
         
         try {
-            Files.walk(Paths.get("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\")).filter(Files::isRegularFile).forEach(filePath -> {
-                String name = "\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\" + filePath.getFileName().toString();
+            Files.walk(Paths.get(this.pathLayoutFolder)).filter(Files::isRegularFile).forEach(filePath -> {
+                String name = this.pathLayoutFolder + filePath.getFileName().toString();
                 if(filePath.getFileName().toString().startsWith("Layout_")) {
                     elementList.add(filePath.getFileName().toString());
                 }
@@ -842,6 +847,16 @@ public class FXMLController implements Initializable {
                 disableImportButton();
             }
         });
+        
+        alert.setTitle("Information");
+        alert.setHeaderText("Test");
+        alert.setContentText("Path to Layout folder is: " + this.pathLayoutFolder + "\n" + "Path to internal folder is: " + this.pathInternalFolder);
+        alert.show();
+    }
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        
     }
     
 }

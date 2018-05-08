@@ -66,6 +66,7 @@
                      <effect>
                         <DropShadow blurType="TWO_PASS_BOX" />
                      </effect></Button>
+                  <Label fx:id="testLabel" text="Label" />
                </children>
                <opaqueInsets>
                   <Insets />

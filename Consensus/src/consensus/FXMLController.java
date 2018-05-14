@@ -178,7 +178,7 @@ public class FXMLController implements Initializable {
         this.fileReader = new FileReader(this.currentPDF, this.currentXML, this.currentLayout);
         this.userDataTable = new UserDataTable(this.fileReader.readInUserDataTableHSSF());
         this.metaDataTable = new MetaDataTable(this.fileReader.readInMetaDataTable());
-        this.layout = new Layout(this.fileReader.readInLayout(";"));
+        this.layout = new Layout(this.pathLayoutFolder + "checkboxes\\", this.fileReader.readInLayout(";"));
         (this.finalTable = new FinalTable()).setHeadings(this.layout.getHeadings());
          this.finalTable.addRow();
          
@@ -847,11 +847,6 @@ public class FXMLController implements Initializable {
                 disableImportButton();
             }
         });
-        
-        alert.setTitle("Information");
-        alert.setHeaderText("Test");
-        alert.setContentText("Path to Layout folder is: " + this.pathLayoutFolder + "\n" + "Path to internal folder is: " + this.pathInternalFolder);
-        alert.show();
     }
     
     @Override

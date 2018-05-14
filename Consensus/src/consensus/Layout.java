@@ -47,12 +47,18 @@ public class Layout {
      * @since Release (1st July 2018)
      */
     private final ArrayList<String> comboBoxes;
+    /**
+     * The path to the folder where are the .CSV-files for the checkboxes is.
+     * @since Release (1st July 2018)
+     */
+    private final String pathToCheckboxes;
 
     /**
      * <b>Constructor</b> <p>
      * Set up the layout as a one-dimensional ArrayList. <p>
      * Set up the number of columns. <p>
      *
+     * @param pathToCheckboxes represented by a String
      * @param layout represented by a one-dimensional String ArrayList
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index > size())
      * @throws NullPointerException if the specified collection is null
@@ -61,11 +67,12 @@ public class Layout {
      * @throws ConcurrentModificationException if the list is structurally modified at any time after the iterator is created, in any way except through the iterator's own remove or add methods
      * @since Release (1st July 2018)
      */
-    public Layout(ArrayList<ArrayList<String>> layout) {
+    public Layout(String pathToCheckboxes, ArrayList<ArrayList<String>> layout) {
         this.headings  = layout.get(0);
         this.columnCount = layout.get(0).size();
         this.citationColumn = layout.get(1).get(0);
         this.comboBoxes = layout.get(2);
+        this.pathToCheckboxes = pathToCheckboxes;
     }
 
     /**
@@ -168,6 +175,14 @@ public class Layout {
         }
         
         return comboBoxPayload;
+    }
+    /**
+     * <b>Getter</b> <p>
+     * @since Release (1st July 2018)
+     * @return The path to the checkboxes.
+     */
+    public String getPathToCheckboxes() {
+        return this.pathToCheckboxes;
     }
 
 }

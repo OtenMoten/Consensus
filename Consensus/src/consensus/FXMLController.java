@@ -84,7 +84,7 @@ public class FXMLController implements Initializable {
     @FXML private Button btnImport;
     @FXML private Button btnExport;
     @FXML private Button btnNext;
-    @FXML private Label testLabel;
+    @FXML private Button btnSeparate;
 
     /**
      * <b> Operation </b> <p>
@@ -93,9 +93,6 @@ public class FXMLController implements Initializable {
      */
     @FXML // mapped to "Export"-button in the main GUI
     private void printFinalTable() {
-
-        separateGreaterAndLess();
-        
         String finaTablePath = outputFileDialog();
        
         //Create blank workbook
@@ -171,7 +168,6 @@ public class FXMLController implements Initializable {
      */
     @FXML // mapped to 'Import'-button in the main GUI
     private void selectLayoutHeadings() {
-        this.btnNext.setDisable(false);
         
         this.currentLayout = this.pathLayoutFolder + this.listView.getSelectionModel().getSelectedItem();
         this.listView.setDisable(true);
@@ -239,6 +235,7 @@ public class FXMLController implements Initializable {
             //if the Accept-Button is clicked then the selected headings will be displayed in the main GUI
             //next step is to apply the headings from the layout to the headings from the userdata table
             display(selectedHeadings);
+            this.btnNext.setDisable(false);
             selectingStage.close();
         });
         
@@ -298,6 +295,7 @@ public class FXMLController implements Initializable {
      * Put it in a new column beside.
      * @since Release (1st July 2018)
      */
+    @FXML // mapped to 'Separate < >'-button in the main GUI
     private void separateGreaterAndLess() {
         ArrayList<ArrayList<String>> copyOfFinalTable = this.finalTable.getTable();
         int iSaveColumn = -1;
@@ -328,6 +326,8 @@ public class FXMLController implements Initializable {
                 }
             }
         }
+        this.btnSeparate.setDisable(true);
+        printTableView();
     }
     
     /**
@@ -365,6 +365,7 @@ public class FXMLController implements Initializable {
             });
             fillSpaces(labelsOfTextField, valuesOfTextField);
             printTableView();
+            this.btnSeparate.setDisable(false);
             stage.close();
         });
         

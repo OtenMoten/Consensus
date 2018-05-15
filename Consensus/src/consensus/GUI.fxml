@@ -66,7 +66,10 @@
                      <effect>
                         <DropShadow blurType="TWO_PASS_BOX" />
                      </effect></Button>
-                  <Label fx:id="testLabel" text="Label" />
+                  <Button fx:id="btnSeparate" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onAction="#separateGreaterAndLess" prefHeight="28.0" prefWidth="91.0" text="Separate &lt; &gt;">
+                     <effect>
+                        <DropShadow />
+                     </effect></Button>
                </children>
                <opaqueInsets>
                   <Insets />

@@ -310,7 +310,7 @@ public class FXMLController implements Initializable {
                 }
             }
             if(iSaveColumn != -1) {break;}
-        } this.finalTable.addColumn(iSaveColumn, "PLACEHOLDER");
+        } this.finalTable.addColumn(iSaveColumn, "Detection");
         
         if(iSaveColumn != -1) {
             for (int row = 0; row < this.finalTable.getRowCount(); row++) {

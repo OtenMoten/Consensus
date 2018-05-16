@@ -305,7 +305,7 @@ public class FXMLController implements Initializable {
         for (int row = 0; row < this.finalTable.getRowCount(); row++) {
             for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
                 if(copyOfFinalTable.get(row).get(column).contains("<") || copyOfFinalTable.get(row).get(column).contains(">")) {
-                    iSaveColumn = column;
+                    iSaveColumn = column - 2;
                     break;
                 }
             }
@@ -317,7 +317,7 @@ public class FXMLController implements Initializable {
                 if(copyOfFinalTable.get(row).get(iSaveColumn + 1).contains("<")) {
                     if(copyOfFinalTable.get(row).get(iSaveColumn + 1).contains(">")) {
                         this.finalTable.setElementAt(row, iSaveColumn, ">");
-                        this.finalTable.setElementAt(row, iSaveColumn + 1, copyOfFinalTable.get(row).get(iSaveColumn + 1).replace(">", ""));
+                        this.finalTable.setElementAt(row, iSaveColumn + 1, copyOfFinalTable.get(row).get(iSaveColumn).replace(">", ""));
                     }
                     this.finalTable.setElementAt(row, iSaveColumn, "<");
                     this.finalTable.setElementAt(row, iSaveColumn + 1, copyOfFinalTable.get(row).get(iSaveColumn + 1).replace("<", ""));

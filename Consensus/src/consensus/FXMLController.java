@@ -362,6 +362,7 @@ public class FXMLController implements Initializable {
             });
             vboxMid.getChildren().stream().filter((children) -> (children instanceof ComboBox)).forEach((Node children) -> {
                 valuesOfTextField.add(((ComboBox) children).getSelectionModel().getSelectedItem().toString());
+                
             });
             fillSpaces(labelsOfTextField, valuesOfTextField);
             printTableView();

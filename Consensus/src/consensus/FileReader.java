@@ -142,7 +142,7 @@ public class FileReader {
                 for (int column = 0; column < numberOfColumns; column++) {
                     if(row.getCell(column, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL) == null) { //Identify BLANK-cells
                         row.createCell(column, CellType.STRING); //Transform a BLANK-cell into a String-cell
-                        row.getCell(column).setCellValue("BLANK"); //Set the text of the cell
+                        row.getCell(column).setCellValue(""); //Set the text of the cell
                     }
                 }
                 

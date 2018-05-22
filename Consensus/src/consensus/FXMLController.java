@@ -244,7 +244,8 @@ public class FXMLController implements Initializable {
         ArrayList<String> citationList = new ArrayList<>();
         citationList.add(citationHeading);
         for (int i = 1; i < this.userDataTable.getRowCount(); i++) {
-            citationList.add(this.metaDataTable.getRowAt(1).toString());
+            //citationList.add(this.metaDataTable.getRowAt(1).toString());
+            citationList.add("Boulard et al. 2018");
         }
         this.finalTable.setColumnAt(citationHeading, citationList);
         
@@ -305,7 +306,7 @@ public class FXMLController implements Initializable {
         for (int row = 0; row < this.finalTable.getRowCount(); row++) {
             for (int column = 0; column < this.finalTable.getColumnCount(); column++) {
                 if(copyOfFinalTable.get(row).get(column).contains("<") || copyOfFinalTable.get(row).get(column).contains(">")) {
-                    iSaveColumn = column - 2;
+                    iSaveColumn = column;
                     break;
                 }
             }

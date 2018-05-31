@@ -175,6 +175,10 @@ public class FXMLController implements Initializable {
         this.userDataTable = new UserDataTable(this.fileReader.readInUserDataTableHSSF());
         this.metaDataTable = new MetaDataTable(this.fileReader.readInMetaDataTable());
         this.layout = new Layout(this.pathLayoutFolder + "checkboxes\\", this.fileReader.readInLayout(";"));
+        alert.setTitle("INFORMATION!");
+                    alert.setHeaderText("Path to checkboxes");
+                    alert.setContentText(this.layout.getPathToCheckboxes());
+                    alert.show();
         (this.finalTable = new FinalTable()).setHeadings(this.layout.getHeadings());
          this.finalTable.addRow();
          
@@ -406,6 +410,10 @@ public class FXMLController implements Initializable {
             
             if(trigger == true) { // if true => checkbox will added
                 vboxMid.getChildren().add(comboBox);
+                alert.setTitle("trigger checkbox");
+                    alert.setHeaderText(comboBox.getId() + "---- " + globalNonSelectedHeading);
+                    alert.setContentText("Contact the creator of this program.");
+                    alert.show();
             } else { // if false =>
                 vboxMid.getChildren().add(textfieldGlobalNonSelectedHeading);
             }

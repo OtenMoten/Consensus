@@ -166,7 +166,7 @@ public class Layout {
         ArrayList<String> comboBoxPayload = new ArrayList<>();
   
         try {
-            bufferedReader = new BufferedReader(new java.io.FileReader("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor\\Layouts\\checkboxes\\" + comboBoxString + ".csv"));
+            bufferedReader = new BufferedReader(new java.io.FileReader("\\\\gruppende\\IV2.2\\Int\\WRMG\\Table_Extractor_Structure\\Layouts\\checkboxes\\" + comboBoxString + ".csv"));
             Iterator<String> iterator = bufferedReader.lines().iterator();
             comboBoxPayload.addAll(Arrays.asList(iterator.next().split(splitter)));
             

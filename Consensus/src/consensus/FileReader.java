@@ -120,7 +120,8 @@ public class FileReader {
         try (FileInputStream excelFileInputStream = new FileInputStream(excelFile)) {
             workbook = new HSSFWorkbook(excelFileInputStream); //Create a virtual copy of the Excel file
             
-            spreadsheet = workbook.getSheetAt(1); //Create a virtual copy of the first spreadsheet in the Excel file
+            int lastSheetInWorkbook = workbook.getNumberOfSheets() - 1;
+            spreadsheet = workbook.getSheetAt(lastSheetInWorkbook); //Create a virtual copy of the first spreadsheet in the Excel file
             numberOfRows = spreadsheet.getPhysicalNumberOfRows();
             numberOfColumns = spreadsheet.getRow(0).getLastCellNum();
             userDataTable = new ArrayList<>(numberOfRows);

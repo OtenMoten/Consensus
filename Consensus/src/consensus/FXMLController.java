@@ -932,11 +932,19 @@ public class FXMLController implements Initializable {
             Files.walk(Paths.get(this.pathInternalFolder)).filter(Files::isRegularFile).forEach(filePath -> {
                 if (filePath.getFileName().toString().endsWith(".xls")) { // Only one file with '.xls' ending should be in the internal folder.
                     this.currentPDF = this.pathInternalFolder + filePath.getFileName().toString();
+                    alert.setTitle("Test!");
+                    alert.setHeaderText("");
+                    alert.setContentText(this.currentPDF);
+                    alert.show();
                     System.out.println(filePath.getFileName().toString());
                 }
 
                 if (filePath.getFileName().toString().endsWith(".xml")) { // Only one file with '.xml' ending should be in the internal folder.
                     this.currentXML = this.pathInternalFolder + filePath.getFileName().toString();
+                    alert.setTitle("Test!");
+                    alert.setHeaderText("");
+                    alert.setContentText(this.currentXML);
+                    alert.show();
                     System.out.println(filePath.getFileName().toString());
                 }
                 
